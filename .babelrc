@@ -1,0 +1,12 @@
+{
+    "plugins": [
+        ["module-resolver", {
+            "root": ["./src"],
+            "extensions": [".ts", ".tsx"],
+            "alias": {
+                "test": "./test",
+                "underscore": "lodash"
+            }
+        }]
+    ]
+}
