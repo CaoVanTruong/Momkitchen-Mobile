@@ -8,7 +8,11 @@ import { loginSchema } from 'schemas';
 import type { LoginFormType } from 'schemas/loginSchema';
 import { Envelop, Lock } from 'assets/svgs';
 
-const LoginForm = () => {
+interface LoginFormProps {
+  onSubmit: (value: LoginFormType) => void;
+}
+
+const LoginForm = ({ onSubmit }: LoginFormProps) => {
   const { control, handleSubmit } = useForm<LoginFormType>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
@@ -16,10 +20,6 @@ const LoginForm = () => {
       password: '',
     },
   });
-
-  const onSubmit = (value: LoginFormType) => {
-    console.log(value);
-  };
 
   return (
     <View style={styles.container}>

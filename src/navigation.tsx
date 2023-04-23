@@ -6,23 +6,39 @@ import {
   driverNavigationConfig,
   registrationConfig,
 } from 'types/navigationConfig';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
 
 const ChefStack = createStackNavigator();
 const LoginStack = createStackNavigator();
 const DriverStack = createStackNavigator();
 
 const ChefNavigator = () => (
-  <ChefStack.Navigator>
+  <ChefStack.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}>
     {chefNavigationConfig.map(item => (
-      <ChefStack.Screen name={item.name} component={item.component} />
+      <ChefStack.Screen
+        name={item.name}
+        component={item.component}
+        key={item.name}
+      />
     ))}
   </ChefStack.Navigator>
 );
 
 const DriverNavigator = () => (
-  <DriverStack.Navigator>
+  <DriverStack.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}>
     {driverNavigationConfig.map(item => (
-      <DriverStack.Screen name={item.name} component={item.component} />
+      <DriverStack.Screen
+        name={item.name}
+        component={item.component}
+        key={item.name}
+      />
     ))}
   </DriverStack.Navigator>
 );
@@ -43,11 +59,23 @@ const LoginNavigator = () => (
 );
 
 const Navigation = () => {
-  return (
-    <NavigationContainer>
-      <LoginNavigator />
-    </NavigationContainer>
-  );
+  const user = useSelector((state: RootState) => state.user);
+
+  console.log(user);
+
+  const renderApp = (() => {
+    if (!user || !user.role) {
+      return <LoginNavigator />;
+    }
+
+    if (user.role === 'Chef') {
+      return <ChefNavigator />;
+    }
+
+    return <DriverNavigator />;
+  })();
+
+  return <NavigationContainer>{renderApp}</NavigationContainer>;
 };
 
 export default Navigation;

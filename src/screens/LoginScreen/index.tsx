@@ -1,21 +1,30 @@
-import { Image, Text } from '@rneui/themed';
-
 import React from 'react';
+import { Text } from '@rneui/themed';
 import { StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Dimensions, Colors } from 'constants';
-import LoginForm from './components/LoginForm';
 import { Logo } from 'assets/svgs';
+import { LoginFormType } from 'schemas/loginSchema';
+import LoginForm from './components/LoginForm';
+import { useDispatch } from 'react-redux';
+import { login } from 'redux/slices/User';
 
 const LoginScreen = () => {
+  const dispatch = useDispatch();
+
+  const onSubmit = (value: LoginFormType) => {
+    console.log(value);
+    dispatch(login());
+  };
+
   return (
     <LinearGradient
       colors={[Colors.lightPink, Colors.white]}
       style={styles.container}>
       <SafeAreaView style={styles.contentWrapper}>
         <View style={styles.content}>
-          <Text>Mom - Kitchen</Text>
+          <Text h2>Mom - Kitchen</Text>
           <View style={styles.imageWrapper}>
             {/* <Image
               source={{ uri: 'http://via.placeholder.com/640x360' }}
@@ -28,7 +37,7 @@ const LoginScreen = () => {
             />
           </View>
         </View>
-        <LoginForm />
+        <LoginForm onSubmit={onSubmit} />
       </SafeAreaView>
     </LinearGradient>
   );
