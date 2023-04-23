@@ -1,3 +1,10 @@
 export { default as Envelop } from './Envelop';
 export { default as Lock } from './Lock';
 export { default as Logo } from './Logo';
+export { default as Logout } from './Logout';
+export { default as Bell } from './Bell';
+export { default as Category } from './Category';
+export { default as History } from './History';
+export { default as Kitchen } from './Kitchen';
+export { default as Market } from './Market';
+export { default as Setting } from './Setting';

@@ -19,9 +19,7 @@ const LoginScreen = () => {
   };
 
   return (
-    <LinearGradient
-      colors={[Colors.lightPink, Colors.white]}
-      style={styles.container}>
+    <LinearGradient colors={Colors.gradient_1} style={styles.container}>
       <SafeAreaView style={styles.contentWrapper}>
         <View style={styles.content}>
           <Text h2>Mom - Kitchen</Text>

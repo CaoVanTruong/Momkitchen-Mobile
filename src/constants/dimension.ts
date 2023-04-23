@@ -14,6 +14,7 @@ const responsiveHeight = (height: number) =>
 const RADIUS_1 = 4;
 const RADIUS_2 = 8;
 const RADIUS_3 = 12;
+const RADIUS_4 = 24;
 
 export default {
   responsiveHeight,
@@ -23,4 +24,5 @@ export default {
   RADIUS_1,
   RADIUS_2,
   RADIUS_3,
+  RADIUS_4,
 };
