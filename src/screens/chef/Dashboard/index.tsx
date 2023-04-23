@@ -2,7 +2,7 @@ import { Text } from '@rneui/themed';
 import { Bell, Category, History, Kitchen, Market, Setting } from 'assets/svgs';
 import { Colors } from 'constants';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LogOutBtn from './components/LogOutBtn';
@@ -45,18 +45,23 @@ const DASHBOARD_MENU = [
 
 const DashboardScreen = () => {
   const dispatch = useDispatch();
+
   const onLogout = () => {
     dispatch(logout());
   };
+
+  const onNotificationPress = () => {};
   return (
     <LinearGradient colors={Colors.gradient_2} style={styles.gradientbg}>
       <SafeAreaView style={styles.container}>
         <View style={styles.headerWrapper}>
           <Text style={styles.welcomeTitle}>Welcome to Mom Kitchen</Text>
-          <Bell width={40} height={40} fill={Colors.white} />
+          <TouchableOpacity onPress={onNotificationPress}>
+            <Bell width={40} height={40} fill={Colors.white} />
+          </TouchableOpacity>
         </View>
         <View style={styles.contentContainer}>
-          <Text h3 style={styles.headerTitle}>
+          <Text h2 style={styles.headerTitle}>
             Dashboard
           </Text>
           <View style={styles.menuContainer}>
@@ -97,7 +102,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerTitle: {
-    color: Colors.gray,
+    color: Colors.white,
   },
   menuContainer: {
     flex: 1,

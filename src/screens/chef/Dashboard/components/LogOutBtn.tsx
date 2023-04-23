@@ -1,6 +1,6 @@
 import { Text } from '@rneui/themed';
 import { Logout } from 'assets/svgs';
-import { Colors } from 'constants';
+import { Colors, Dimensions } from 'constants';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
@@ -27,12 +27,15 @@ export default LogOutBtn;
 const styles = StyleSheet.create({
   footerWrapper: {
     alignSelf: 'stretch',
-    backgroundColor: Colors.gray,
+    backgroundColor: '#FFFFFF88',
     paddingHorizontal: 8,
     paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
+    borderWidth: 1,
+    borderColor: Colors.darkGreen,
+    borderRadius: Dimensions.RADIUS_2,
   },
   logoutWrapper: {
     justifyContent: 'center',
