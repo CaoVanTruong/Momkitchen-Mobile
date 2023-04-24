@@ -1,13 +1,9 @@
-import { Text } from '@rneui/themed';
+import { ScreenContainer } from 'components';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const KitchenScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text>Kitchen Screen</Text>
-    </View>
-  );
+  return <ScreenContainer title="Kitchen" />;
 };
 
 export default KitchenScreen;

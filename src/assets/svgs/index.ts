@@ -8,3 +8,6 @@ export { default as History } from './History';
 export { default as Kitchen } from './Kitchen';
 export { default as Market } from './Market';
 export { default as Setting } from './Setting';
+export { default as LeftArrow } from './LeftArrow';
+export { default as Times } from './Times';
+export { default as PlusRounded } from './PlusRounded';

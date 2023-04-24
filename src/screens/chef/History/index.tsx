@@ -1,13 +1,9 @@
-import { Text } from '@rneui/themed';
+import { ScreenContainer } from 'components';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const HistoryScreen = () => {
-  return (
-    <View style={StyleSheet.container}>
-      <Text>History Screen</Text>
-    </View>
-  );
+  return <ScreenContainer title="History" />;
 };
 
 export default HistoryScreen;

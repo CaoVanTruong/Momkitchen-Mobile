@@ -1,13 +1,9 @@
-import { Text } from '@rneui/themed';
+import { ScreenContainer } from 'components';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const CategoryScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text>Category Screen</Text>
-    </View>
-  );
+  return <ScreenContainer title="Category" />;
 };
 
 export default CategoryScreen;

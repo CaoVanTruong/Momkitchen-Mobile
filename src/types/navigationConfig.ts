@@ -1,3 +1,11 @@
+import {
+  CHEF_DASHBOARD,
+  CHEF_MARKET,
+  CHEF_HISTORY,
+  CHEF_KITCHEN,
+  CHEF_CATEGORY,
+  CHEF_SETTINGS,
+} from 'constants/screenName';
 import { LoginScreen } from 'screens';
 import {
   CategoryScreen,
@@ -8,13 +16,6 @@ import {
   SettingScreen,
 } from 'screens/chef';
 import { DashboardScreen as DriverDashboardScreen } from 'screens/driver';
-
-export const CHEF_DASHBOARD = 'chefDashboard';
-export const CHEF_MARKET = 'chefMarket';
-export const CHEF_SETTINGS = 'chefSettings';
-export const CHEF_KITCHEN = 'chefKitchen';
-export const CHEF_HISTORY = 'chefHistory';
-export const CHEF_CATEGORY = 'chefCategory';
 
 export const chefNavigationConfig = [
   {

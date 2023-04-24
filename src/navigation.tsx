@@ -61,8 +61,6 @@ const LoginNavigator = () => (
 const Navigation = () => {
   const user = useSelector((state: RootState) => state.user);
 
-  console.log(user);
-
   const renderApp = (() => {
     if (!user || !user.role) {
       return <LoginNavigator />;

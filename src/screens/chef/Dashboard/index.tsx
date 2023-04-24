@@ -9,14 +9,15 @@ import LogOutBtn from './components/LogOutBtn';
 import { useDispatch } from 'react-redux';
 import { logout } from 'redux/slices/User';
 import { DashboardItem } from 'components';
+
+import { useNavigation } from '@react-navigation/native';
 import {
-  CHEF_CATEGORY,
+  CHEF_MARKET,
   CHEF_HISTORY,
   CHEF_KITCHEN,
-  CHEF_MARKET,
   CHEF_SETTINGS,
-} from 'types/navigationConfig';
-import { useNavigation } from '@react-navigation/native';
+  CHEF_CATEGORY,
+} from 'constants/screenName';
 
 const DASHBOARD_MENU = [
   {
