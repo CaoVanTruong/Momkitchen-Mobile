@@ -9,45 +9,70 @@ import LogOutBtn from './components/LogOutBtn';
 import { useDispatch } from 'react-redux';
 import { logout } from 'redux/slices/User';
 import { DashboardItem } from 'components';
+import {
+  CHEF_CATEGORY,
+  CHEF_HISTORY,
+  CHEF_KITCHEN,
+  CHEF_MARKET,
+  CHEF_SETTINGS,
+} from 'types/navigationConfig';
+import { useNavigation } from '@react-navigation/native';
 
 const DASHBOARD_MENU = [
   {
     icon: <Market width={36} height={36} />,
     title: 'Markets',
     subtitle: 'Tap here to sale',
-    screenName: '',
+    screenName: CHEF_MARKET,
   },
   {
     icon: <History width={36} height={36} />,
     title: 'History',
     subtitle: 'View all your orders',
-    screenName: '',
+    screenName: CHEF_HISTORY,
   },
   {
     icon: <Kitchen width={36} height={36} />,
     title: 'Kitchen',
     subtitle: 'Manage your dishes',
-    screenName: '',
+    screenName: CHEF_KITCHEN,
   },
   {
     icon: <Setting width={36} height={36} />,
     title: 'Settings',
     subtitle: 'Setting your profile',
-    screenName: '',
+    screenName: CHEF_SETTINGS,
   },
   {
     icon: <Category width={36} height={36} />,
     title: 'Category',
     subtitle: 'Many type of foods',
-    screenName: '',
+    screenName: CHEF_CATEGORY,
   },
 ];
 
 const DashboardScreen = () => {
   const dispatch = useDispatch();
+  const navigator = useNavigation();
 
   const onLogout = () => {
     dispatch(logout());
+  };
+
+  const renderMenuItem = (menu: any) => {
+    return (
+      <DashboardItem
+        key={menu.title}
+        onPress={() => {
+          onMenuClick(menu.screenName);
+        }}
+        {...menu}
+      />
+    );
+  };
+
+  const onMenuClick = (screenName: string) => {
+    navigator.navigate(screenName as never);
   };
 
   const onNotificationPress = () => {};
@@ -56,6 +81,7 @@ const DashboardScreen = () => {
       <SafeAreaView style={styles.container}>
         <View style={styles.headerWrapper}>
           <Text style={styles.welcomeTitle}>Welcome to Mom Kitchen</Text>
+          {/* TODO: Add Notification function */}
           <TouchableOpacity onPress={onNotificationPress}>
             <Bell width={40} height={40} fill={Colors.white} />
           </TouchableOpacity>
@@ -65,9 +91,7 @@ const DashboardScreen = () => {
             Dashboard
           </Text>
           <View style={styles.menuContainer}>
-            {DASHBOARD_MENU.map(menu => (
-              <DashboardItem key={menu.title} onPress={() => {}} {...menu} />
-            ))}
+            {DASHBOARD_MENU.map(renderMenuItem)}
           </View>
         </View>
         <LogOutBtn onLogout={onLogout} />
@@ -85,6 +109,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 24,
+    paddingVertical: 16,
   },
   headerWrapper: {
     alignSelf: 'stretch',

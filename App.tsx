@@ -11,7 +11,7 @@ function App(): JSX.Element {
   return (
     <View style={styles.container}>
       <ThemeProvider theme={theme}>
-        <StatusBar barStyle={'dark-content'} />
+        <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
         <Provider store={store}>
           <Navigation />
         </Provider>
