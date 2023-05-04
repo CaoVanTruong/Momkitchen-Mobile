@@ -1,26 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { UserState } from 'types/user';
+import { IUserState } from 'types/user';
 
-const initialValue: UserState = {
+const initialValue: IUserState = {
   name: '',
   email: '',
   password: '',
   role: undefined,
+  phone: '',
+  address: '',
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: initialValue,
   reducers: {
-    login: (): UserState => {
+    login: (): IUserState => {
       return {
         name: 'foo',
         email: 'abc@example.com',
         password: 'password',
         role: 'Chef',
+        phone: '0987654321',
+        address: 'Binh Thanh District, Ho Chi Minh City, Vietnam',
       };
     },
-    logout: (): UserState => initialValue,
+    logout: (): IUserState => initialValue,
   },
 });
 

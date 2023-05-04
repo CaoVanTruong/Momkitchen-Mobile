@@ -9,42 +9,61 @@ import {
   ViewStyle,
 } from 'react-native';
 import { Colors } from 'constants';
+import LinearGradient from 'react-native-linear-gradient';
 
 interface ScreenContainerProps {
-  safeView?: boolean;
   title?: string;
   headerShown?: boolean;
-  onBack?: () => void;
+  hasGradientBg?: boolean;
+  hasBack?: boolean;
+  gradientColors?: string[];
+  rightIcon?: React.ReactNode;
+  titleAlignment?: 'left' | 'right' | 'center';
   titleStyle?: StyleProp<TextStyle>;
   headerStyle?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
   bodyContainerStyle?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
+  onBack?: () => void;
+  onRightIconPress?: () => void;
 }
 
 const ScreenContainer = (props: ScreenContainerProps) => {
   const {
-    safeView = true,
+    hasGradientBg = false,
+    gradientColors = Colors.gradient_1,
     headerStyle,
     containerStyle,
     bodyContainerStyle,
     children,
     ...headerProps
   } = props;
-  const ContainerView = safeView ? SafeAreaView : View;
-  return (
-    <ContainerView style={[styles.container, containerStyle]}>
+
+  const renderView = () => (
+    <SafeAreaView style={[styles.container, containerStyle]}>
       <Header containerStyle={headerStyle} {...headerProps} />
       <View style={bodyContainerStyle}>{children}</View>
-    </ContainerView>
+    </SafeAreaView>
   );
+
+  if (hasGradientBg) {
+    return (
+      <LinearGradient colors={gradientColors} style={styles.gradientbg}>
+        {renderView()}
+      </LinearGradient>
+    );
+  }
+
+  return renderView();
 };
 
 export default ScreenContainer;
 
 const styles = StyleSheet.create({
+  gradientbg: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
   },
 });

@@ -1,46 +1,79 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {
-  chefNavigationConfig,
-  driverNavigationConfig,
-  registrationConfig,
-} from 'types/navigationConfig';
+import { registrationConfig } from 'types/navigationConfig';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  DashboardScreen as ChefDashboardScreen,
+  KitchenScreen,
+  MarketScreen,
+  OrderScreen,
+  ProfileScreen,
+} from 'screens/chef';
+import { Home, Kitchen, List, Market, User } from 'assets/svgs';
+import { Colors } from 'constants';
 
-const ChefStack = createStackNavigator();
+const ChefTab = createBottomTabNavigator();
 const LoginStack = createStackNavigator();
-const DriverStack = createStackNavigator();
 
 const ChefNavigator = () => (
-  <ChefStack.Navigator
+  <ChefTab.Navigator
     screenOptions={{
       headerShown: false,
+      tabBarActiveTintColor: Colors.orange,
+      tabBarStyle: {
+        paddingVertical: 8,
+      },
     }}>
-    {chefNavigationConfig.map(item => (
-      <ChefStack.Screen
-        name={item.name}
-        component={item.component}
-        key={item.name}
-      />
-    ))}
-  </ChefStack.Navigator>
-);
-
-const DriverNavigator = () => (
-  <DriverStack.Navigator
-    screenOptions={{
-      headerShown: false,
-    }}>
-    {driverNavigationConfig.map(item => (
-      <DriverStack.Screen
-        name={item.name}
-        component={item.component}
-        key={item.name}
-      />
-    ))}
-  </DriverStack.Navigator>
+    <ChefTab.Screen
+      name={'Home'}
+      component={ChefDashboardScreen}
+      options={{
+        tabBarIcon: ({ color }: { color: string }) => (
+          <Home width={28} height={28} fill={color} />
+        ),
+      }}
+    />
+    <ChefTab.Screen
+      name={'Market'}
+      component={MarketScreen}
+      options={{
+        tabBarIcon: ({ color }: { color: string }) => (
+          <Market width={28} height={28} fill={color} />
+        ),
+      }}
+    />
+    <ChefTab.Screen
+      name={'Kitchen'}
+      component={KitchenScreen}
+      options={{
+        tabBarIcon: ({ color }: { color: string }) => (
+          <Kitchen width={28} height={28} fill={color} />
+        ),
+      }}
+    />
+    <ChefTab.Screen
+      name={'Order'}
+      component={OrderScreen}
+      options={{
+        tabBarIcon: ({ color }: { color: string }) => (
+          <List width={28} height={28} fill={color} />
+        ),
+      }}
+    />
+    <ChefTab.Screen
+      name={'Profile'}
+      component={ProfileScreen}
+      options={{
+        tabBarIcon: ({ color }: { color: string }) => (
+          <User width={28} height={28} fill={color} />
+        ),
+      }}
+    />
+  </ChefTab.Navigator>
 );
 
 const LoginNavigator = () => (
@@ -70,7 +103,7 @@ const Navigation = () => {
       return <ChefNavigator />;
     }
 
-    return <DriverNavigator />;
+    return <LoginNavigator />;
   })();
 
   return <NavigationContainer>{renderApp}</NavigationContainer>;

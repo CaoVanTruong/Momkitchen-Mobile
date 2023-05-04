@@ -1,141 +1,179 @@
 import { Text } from '@rneui/themed';
-import { Bell, Category, History, Kitchen, Market, Setting } from 'assets/svgs';
-import { Colors } from 'constants';
+import { Bell, Cash, List } from 'assets/svgs';
+import { Colors, Dimensions } from 'constants';
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import LogOutBtn from './components/LogOutBtn';
-import { useDispatch } from 'react-redux';
-import { logout } from 'redux/slices/User';
-import { DashboardItem } from 'components';
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { OrderItem, ScreenContainer } from 'components';
+import { IOrderItem } from 'types/order';
 
-import { useNavigation } from '@react-navigation/native';
-import {
-  CHEF_MARKET,
-  CHEF_HISTORY,
-  CHEF_KITCHEN,
-  CHEF_SETTINGS,
-  CHEF_CATEGORY,
-} from 'constants/screenName';
-
-const DASHBOARD_MENU = [
+const MOCK_DATA: IOrderItem[] = [
   {
-    icon: <Market width={36} height={36} />,
-    title: 'Markets',
-    subtitle: 'Tap here to sale',
-    screenName: CHEF_MARKET,
+    id: '1',
+    name: 'Recent Order Item 1',
+    phone: '0123456789',
+    price: 50000,
+    time: '2023-05-04T10:55:24Z',
+    status: 'Ordering',
   },
   {
-    icon: <History width={36} height={36} />,
-    title: 'History',
-    subtitle: 'View all your orders',
-    screenName: CHEF_HISTORY,
+    id: '2',
+    name: 'Recent Order Item 2',
+    phone: '0123456789',
+    price: 50000,
+    time: '2023-05-04T10:55:24Z',
+    status: 'Ordering',
   },
   {
-    icon: <Kitchen width={36} height={36} />,
-    title: 'Kitchen',
-    subtitle: 'Manage your dishes',
-    screenName: CHEF_KITCHEN,
+    id: '3',
+    name: 'Recent Order Item 3',
+    phone: '0123456789',
+    price: 50000,
+    time: '2023-05-04T10:55:24Z',
+    status: 'Ordering',
   },
   {
-    icon: <Setting width={36} height={36} />,
-    title: 'Settings',
-    subtitle: 'Setting your profile',
-    screenName: CHEF_SETTINGS,
-  },
-  {
-    icon: <Category width={36} height={36} />,
-    title: 'Category',
-    subtitle: 'Many type of foods',
-    screenName: CHEF_CATEGORY,
+    id: '4',
+    name: 'Recent Order Item 4',
+    phone: '0123456789',
+    price: 50000,
+    time: '2023-05-04T10:55:24Z',
+    status: 'Ordering',
   },
 ];
 
 const DashboardScreen = () => {
-  const dispatch = useDispatch();
-  const navigator = useNavigation();
-
-  const onLogout = () => {
-    dispatch(logout());
+  const onNotificationPress = () => {
+    console.log('notificationPress');
   };
 
-  const renderMenuItem = (menu: any) => {
-    return (
-      <DashboardItem
-        key={menu.title}
-        onPress={() => {
-          onMenuClick(menu.screenName);
-        }}
-        {...menu}
-      />
-    );
+  const onConfirm = (id: string) => {
+    if (!id) {
+      return;
+    }
+    console.log('confirm order', id);
   };
 
-  const onMenuClick = (screenName: string) => {
-    navigator.navigate(screenName as never);
-  };
+  const renderOrderItems = ({ item }: { item: IOrderItem }) => (
+    <OrderItem onConfirm={() => onConfirm(item.id)} {...item} />
+  );
 
-  const onNotificationPress = () => {};
   return (
-    <LinearGradient colors={Colors.gradient_2} style={styles.gradientbg}>
-      <SafeAreaView style={styles.container}>
+    <ScreenContainer
+      hasGradientBg
+      title="Home"
+      hasBack={false}
+      bodyContainerStyle={styles.container}
+      titleAlignment="left"
+      rightIcon={<Bell width={30} height={30} fill={Colors.white} />}
+      onRightIconPress={onNotificationPress}
+      gradientColors={Colors.gradient_2}>
+      <View style={[styles.section, styles.ph_24]}>
         <View style={styles.headerWrapper}>
-          <Text style={styles.welcomeTitle}>Welcome to Mom Kitchen</Text>
-          {/* TODO: Add Notification function */}
-          <TouchableOpacity onPress={onNotificationPress}>
-            <Bell width={40} height={40} fill={Colors.white} />
-          </TouchableOpacity>
+          <Text style={styles.headingTitle}>Total</Text>
         </View>
-        <View style={styles.contentContainer}>
-          <Text h2 style={styles.headerTitle}>
-            Dashboard
-          </Text>
-          <View style={styles.menuContainer}>
-            {DASHBOARD_MENU.map(renderMenuItem)}
+        <View style={styles.statisticContainer}>
+          <View
+            style={[
+              styles.statisticItem,
+              { backgroundColor: Colors.gradient_2[0] },
+            ]}>
+            <View>
+              <List width={48} height={48} />
+            </View>
+            <View style={styles.statisticContent}>
+              <Text style={styles.statisticLabel}>Orders</Text>
+              <Text style={styles.statisticValue}>15</Text>
+            </View>
+          </View>
+          <View
+            style={[
+              styles.statisticItem,
+              { backgroundColor: Colors.gradient_2[1] },
+            ]}>
+            <View>
+              <Cash width={48} height={48} />
+            </View>
+            <View style={styles.statisticContent}>
+              <Text style={styles.statisticLabel}>Revenue</Text>
+              <Text style={styles.statisticValue}>2.400.000 VND</Text>
+            </View>
           </View>
         </View>
-        <LogOutBtn onLogout={onLogout} />
-      </SafeAreaView>
-    </LinearGradient>
+      </View>
+      <View style={[styles.section, styles.dynamicContainer]}>
+        <View style={[styles.headerWrapper, styles.ph_24]}>
+          <Text style={styles.headingTitle}>Recent Orders</Text>
+        </View>
+        <View style={styles.dynamicContainer}>
+          <FlatList
+            data={MOCK_DATA}
+            keyExtractor={item => item.id.toString()}
+            renderItem={renderOrderItems}
+            style={[styles.listWrapper, styles.ph_24]}
+          />
+        </View>
+      </View>
+    </ScreenContainer>
   );
 };
 
 export default DashboardScreen;
 
 const styles = StyleSheet.create({
-  gradientbg: {
-    flex: 1,
-  },
   container: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+    backgroundColor: Colors.gray,
+  },
+  dynamicContainer: {
+    flex: 1,
+  },
+  section: {
+    marginBottom: 16,
+    marginTop: 8,
   },
   headerWrapper: {
-    alignSelf: 'stretch',
-    alignItems: 'flex-start',
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
   },
-  welcomeTitle: {
-    textTransform: 'uppercase',
+  ph_24: {
+    paddingHorizontal: 24,
+  },
+  headingTitle: {
     fontWeight: 'bold',
-    color: Colors.gray,
-    fontSize: 12,
+    fontSize: 20,
   },
-  contentContainer: {
-    flex: 1,
-  },
-  headerTitle: {
-    color: Colors.white,
-  },
-  menuContainer: {
-    flex: 1,
-    marginVertical: 16,
+  statisticContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    paddingTop: 24,
+    justifyContent: 'space-between',
+  },
+  statisticItem: {
+    backgroundColor: Colors.white,
+    width: Dimensions.SCREEN_WIDTH / 2 - 36,
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: Dimensions.RADIUS_2,
+  },
+  statisticContent: {
+    marginTop: 8,
+  },
+  statisticLabel: {
+    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  statisticValue: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    // color: Colors.orange,
+  },
+  link: {},
+  listWrapper: {
+    paddingVertical: 4,
+    backgroundColor: Colors.white,
+    borderRadius: Dimensions.RADIUS_2,
   },
 });

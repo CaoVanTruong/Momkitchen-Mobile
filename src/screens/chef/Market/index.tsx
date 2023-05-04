@@ -43,7 +43,10 @@ const data = [
 const MarketScreen = () => {
   const renderItem = ({ item }: any) => <MarketItem {...item} />;
   return (
-    <ScreenContainer title="Market" bodyContainerStyle={styles.container}>
+    <ScreenContainer
+      title="Market"
+      bodyContainerStyle={styles.container}
+      hasBack={false}>
       <View style={styles.marketListContainer}>
         <FlatList
           data={data}

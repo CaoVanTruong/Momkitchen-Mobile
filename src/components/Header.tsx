@@ -9,20 +9,28 @@ import {
   TextStyle,
   View,
   ViewStyle,
+  TouchableOpacity,
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 interface HeaderProps {
   title?: string;
   headerShown?: boolean;
-  onBack?: () => void;
+  hasBack?: boolean;
+  titleAlignment?: 'left' | 'right' | 'center';
   titleStyle?: StyleProp<TextStyle>;
   containerStyle?: StyleProp<ViewStyle>;
+  rightIcon?: React.ReactNode;
+  onBack?: () => void;
+  onRightIconPress?: () => void;
 }
 
 const Header = ({
   title = '',
   headerShown = true,
+  hasBack = true,
+  titleAlignment = 'center',
+  rightIcon,
+  onRightIconPress,
   onBack,
   titleStyle,
   containerStyle,
@@ -45,16 +53,34 @@ const Header = ({
 
   return (
     <View style={[styles.header, containerStyle]}>
-      <View style={styles.backIconWrapper}>
-        <TouchableOpacity onPress={onBackPress} style={styles.backIcon}>
-          <LeftArrow width={24} height={24} fill={Colors.red} />
-        </TouchableOpacity>
-      </View>
+      {hasBack && (
+        <View style={styles.backIconWrapper}>
+          <TouchableOpacity onPress={onBackPress} style={styles.backIcon}>
+            <LeftArrow width={24} height={24} fill={Colors.white} />
+          </TouchableOpacity>
+        </View>
+      )}
       <View>
-        <Text h4 style={[styles.headerTitle, titleStyle]}>
+        <Text
+          h4
+          style={[
+            styles.headerTitle,
+            titleStyle,
+            { textAlign: titleAlignment },
+          ]}>
           {title}
         </Text>
       </View>
+      {!!rightIcon && (
+        <View style={styles.rightIconWrapper}>
+          <TouchableOpacity
+            disabled={!onRightIconPress}
+            onPress={onRightIconPress}
+            style={styles.rightIcon}>
+            {rightIcon}
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -67,22 +93,31 @@ const styles = StyleSheet.create({
   },
   header: {
     alignSelf: 'stretch',
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.lightGreen,
     justifyContent: 'center',
-    alignItems: 'center',
+    paddingHorizontal: 24,
     paddingVertical: 16,
     ...ShadowStyles.ELEVATOR_4,
   },
   headerTitle: {
-    color: Colors.red,
+    color: Colors.white,
     textTransform: 'uppercase',
     fontWeight: 'bold',
   },
   backIconWrapper: {
     position: 'absolute',
     left: 12,
+    zIndex: 1,
+  },
+  rightIconWrapper: {
+    position: 'absolute',
+    right: 12,
+    zIndex: 1,
   },
   backIcon: {
+    padding: 12,
+  },
+  rightIcon: {
     padding: 12,
   },
 });
