@@ -1,14 +1,15 @@
 import { ScreenContainer } from 'components';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 const KitchenScreen = () => {
   return (
     <ScreenContainer
       hasBack={false}
       title="Kitchen"
-      bodyContainerStyle={styles.container}
-    />
+      bodyContainerStyle={styles.container}>
+      <View />
+    </ScreenContainer>
   );
 };
 

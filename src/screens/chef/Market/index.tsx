@@ -4,39 +4,20 @@ import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import MarketItem from './components/MarketItem';
 import { PlusRounded } from 'assets/svgs';
 import { Colors } from 'constants';
+import { IMarketItem } from 'types/market';
 
-const data = [
+const data: IMarketItem[] = [
   {
-    id: 1,
-    image:
-      'https://images.pexels.com/photos/12166666/pexels-photo-12166666.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    title: 'Mam com tuoi tho',
-    description: 'Ca phao voi thit luoc cham mam tom',
-    quantity: 5,
+    id: '1',
+    title: 'Lunch',
+    createdDate: '2023-05-04T00:00:00Z',
+    timeline: '10h30 - 14h',
   },
   {
-    id: 2,
-    image:
-      'https://images.pexels.com/photos/12166666/pexels-photo-12166666.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    title: 'Mam com tuoi tho 2',
-    description: 'Ca phao voi thit chien cham mam ruoc',
-    quantity: 12,
-  },
-  {
-    id: 3,
-    image:
-      'https://images.pexels.com/photos/12166666/pexels-photo-12166666.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    title: 'Mam com gia dinh 1',
-    description: 'Ca phao voi thit chien cham mam ruoc',
-    quantity: 2,
-  },
-  {
-    id: 4,
-    image:
-      'https://images.pexels.com/photos/12166666/pexels-photo-12166666.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    title: 'Mam com gia dinh 2',
-    description: 'Ca phao voi thit chien cham mam ruoc',
-    quantity: 4,
+    id: '2',
+    title: 'Dinner',
+    createdDate: '2023-05-04T00:00:00Z',
+    timeline: '16h30 - 20h',
   },
 ];
 
@@ -44,7 +25,7 @@ const MarketScreen = () => {
   const renderItem = ({ item }: any) => <MarketItem {...item} />;
   return (
     <ScreenContainer
-      title="Market"
+      title="Market Sessions"
       bodyContainerStyle={styles.container}
       hasBack={false}>
       <View style={styles.marketListContainer}>

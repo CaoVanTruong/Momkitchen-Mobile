@@ -1,62 +1,57 @@
-import { Image, Text } from '@rneui/themed';
-import { Times } from 'assets/svgs';
-import { Colors, Dimensions } from 'constants';
+import { Text } from '@rneui/themed';
+import { Colors, DEFAULT_DATE_FORMAT, Dimensions } from 'constants';
+import shadowStyle from 'constants/shadowStyle';
+import dayjs from 'dayjs';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { IMarketItem } from 'types/market';
 
-interface MarketItemProps {
-  image?: string;
-  title: string;
-  description?: string;
-  quantity?: number;
+interface MarketItemProps extends IMarketItem {
   onPress?: () => void;
-  onRemove?: () => void;
 }
 
 const MarketItem = ({
-  image,
   title,
-  description,
-  quantity = 0,
+  createdDate,
+  timeline,
   onPress,
-  onRemove,
 }: MarketItemProps) => {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.marketItemContainer}>
-        <View style={styles.imgWrapper}>
-          <Image
-            source={{ uri: image }}
-            style={styles.img}
-            resizeMode="cover"
-          />
+    <View style={styles.container}>
+      <TouchableOpacity onPress={onPress} style={styles.actionContainer}>
+        <View style={styles.marketItemContainer}>
+          <View style={styles.contentWrapper}>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.createdDate}>
+              Created Date: {dayjs(createdDate).format(DEFAULT_DATE_FORMAT)}
+            </Text>
+            <Text style={styles.timeline}>Timeline: {timeline}</Text>
+          </View>
         </View>
-        <View style={styles.contentWrapper}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.desc}>{description}</Text>
-          <Text style={styles.quantity}>Quantity: {quantity}</Text>
-        </View>
-        <View>
-          <TouchableOpacity style={styles.actionBtn} onPress={onRemove}>
-            <Times width={28} height={28} fill={Colors.orange} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 export default MarketItem;
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.white,
+    marginBottom: 12,
+    borderRadius: Dimensions.RADIUS_2,
+    ...shadowStyle.ELEVATOR_4,
+  },
+  actionContainer: {
+    borderRadius: Dimensions.RADIUS_2,
+  },
   marketItemContainer: {
     justifyContent: 'center',
     alignItems: 'flex-start',
     flexDirection: 'row',
-    backgroundColor: Colors.gray,
+    backgroundColor: Colors.white,
     padding: 12,
     borderRadius: Dimensions.RADIUS_2,
-    marginBottom: 12,
   },
   imgWrapper: {
     alignSelf: 'center',
@@ -66,14 +61,9 @@ const styles = StyleSheet.create({
   contentWrapper: {
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'flex-start',
+    alignItems: 'stretch',
     justifyContent: 'flex-start',
     marginHorizontal: 12,
-  },
-  img: {
-    width: 64,
-    height: 64,
-    borderRadius: Dimensions.RADIUS_2,
   },
   title: {
     fontSize: 16,
@@ -82,11 +72,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     fontWeight: '500',
   },
-  desc: {},
-  quantity: {},
-  actionBtn: {
-    padding: 4,
-    marginRight: -4,
-    marginTop: -10,
+  createdDate: {},
+  timeline: {
+    textAlign: 'right',
   },
 });
