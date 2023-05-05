@@ -19,3 +19,6 @@ export { default as Phone } from './Phone';
 export { default as Coin } from './Coin';
 export { default as Clock } from './Clock';
 export { default as UserPlaceholder } from './UserPlaceholder';
+export { default as Dish } from './Dish';
+export { default as Meal } from './Meal';
+export { default as Noodle } from './Noodle';

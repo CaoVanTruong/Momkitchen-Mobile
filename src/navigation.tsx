@@ -8,6 +8,10 @@ import { RootState } from 'store';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   DashboardScreen as ChefDashboardScreen,
+  DishesScreen,
+  DishTypeScreen,
+  FoodPackageScreen,
+  FoodStyleScreen,
   KitchenScreen,
   MarketScreen,
   OrderScreen,
@@ -17,9 +21,10 @@ import { Home, Kitchen, List, Market, User } from 'assets/svgs';
 import { Colors } from 'constants';
 
 const ChefTab = createBottomTabNavigator();
+const ChefStack = createStackNavigator();
 const LoginStack = createStackNavigator();
 
-const ChefNavigator = () => (
+const ChefTabNavigator = () => (
   <ChefTab.Navigator
     screenOptions={{
       headerShown: false,
@@ -74,6 +79,16 @@ const ChefNavigator = () => (
       }}
     />
   </ChefTab.Navigator>
+);
+
+const ChefNavigator = () => (
+  <ChefStack.Navigator screenOptions={{ headerShown: false }}>
+    <ChefStack.Screen name="homeTab" component={ChefTabNavigator} />
+    <ChefStack.Screen name="dishType" component={DishTypeScreen} />
+    <ChefStack.Screen name="dishes" component={DishesScreen} />
+    <ChefStack.Screen name="foodPackage" component={FoodPackageScreen} />
+    <ChefStack.Screen name="foodStyle" component={FoodStyleScreen} />
+  </ChefStack.Navigator>
 );
 
 const LoginNavigator = () => (
