@@ -11,18 +11,22 @@ import { AddDishTypeFormType } from 'schemas/dishSchemas';
 interface AddDishTypeFormProps {
   visible: boolean;
   onClose?: () => void;
+  onSubmit?: (value: AddDishTypeFormType) => void;
 }
 
-const AddDishTypeForm = ({ visible = true, onClose }: AddDishTypeFormProps) => {
-  const { control, handleSubmit } = useForm<AddDishTypeFormType>({
+const AddDishTypeForm = ({
+  visible = true,
+  onClose,
+  onSubmit = () => {},
+}: AddDishTypeFormProps) => {
+  const { control, handleSubmit, reset } = useForm<AddDishTypeFormType>({
     resolver: yupResolver(dishSchemas.addDishTypeSchema),
   });
 
-  const onSubmit = (value: AddDishTypeFormType) => {
+  const onSubmitForm = (value: AddDishTypeFormType) => {
     console.log(value);
-    if (onClose) {
-      onClose();
-    }
+    onSubmit(value);
+    reset();
   };
 
   return (
@@ -31,7 +35,7 @@ const AddDishTypeForm = ({ visible = true, onClose }: AddDishTypeFormProps) => {
       title="Add new Dish Type"
       onClose={onClose}
       onCancelPress={onClose}
-      onSubmitPress={handleSubmit(onSubmit)}>
+      onSubmitPress={handleSubmit(onSubmitForm)}>
       <Controller
         control={control}
         name="name"
@@ -81,6 +85,7 @@ export default AddDishTypeForm;
 const styles = StyleSheet.create({
   input: {
     paddingHorizontal: 8,
+    fontSize: 14,
   },
   label: {
     color: Colors.superDarkPink,

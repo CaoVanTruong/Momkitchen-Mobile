@@ -6,11 +6,11 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from 'redux/slices/User';
+import { logout } from 'redux/actions/user';
 import { RootState } from 'store';
 
 const SettingsScreen = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const user = useSelector((state: RootState) => state.user);
 
   const onLogout = () => {

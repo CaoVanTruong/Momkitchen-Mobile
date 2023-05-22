@@ -1,19 +1,25 @@
 import { Text } from '@rneui/themed';
-import { Colors, DEFAULT_DATE_FORMAT, Dimensions } from 'constants';
+import {
+  Colors,
+  DEFAULT_DATE_FORMAT,
+  DEFAULT_TIME_FORMAT,
+  Dimensions,
+} from 'constants';
 import shadowStyle from 'constants/shadowStyle';
 import dayjs from 'dayjs';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { IMarketItem } from 'types/market';
+import { ISession } from 'types/session';
 
-interface MarketItemProps extends IMarketItem {
+interface MarketItemProps extends ISession {
   onPress?: () => void;
 }
 
 const MarketItem = ({
   title,
   createdDate,
-  timeline,
+  startTime,
+  endTime,
   onPress,
 }: MarketItemProps) => {
   return (
@@ -21,11 +27,15 @@ const MarketItem = ({
       <TouchableOpacity onPress={onPress} style={styles.actionContainer}>
         <View style={styles.marketItemContainer}>
           <View style={styles.contentWrapper}>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.title}>{title || 'No Title'}</Text>
             <Text style={styles.createdDate}>
               Created Date: {dayjs(createdDate).format(DEFAULT_DATE_FORMAT)}
             </Text>
-            <Text style={styles.timeline}>Timeline: {timeline}</Text>
+            <Text style={styles.timeline}>
+              {`Timeline: ${dayjs(startTime).format(
+                DEFAULT_TIME_FORMAT,
+              )} - ${dayjs(endTime).format(DEFAULT_TIME_FORMAT)}`}
+            </Text>
           </View>
         </View>
       </TouchableOpacity>

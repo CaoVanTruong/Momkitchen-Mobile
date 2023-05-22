@@ -1,27 +1,28 @@
 import { ScreenContainer } from 'components';
-import React from 'react';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import MarketItem from './components/MarketItem';
-import { PlusRounded } from 'assets/svgs';
-import { Colors } from 'constants';
-import { IMarketItem } from 'types/market';
-
-const data: IMarketItem[] = [
-  {
-    id: '1',
-    title: 'Lunch',
-    createdDate: '2023-05-04T00:00:00Z',
-    timeline: '10h30 - 14h',
-  },
-  {
-    id: '2',
-    title: 'Dinner',
-    createdDate: '2023-05-04T00:00:00Z',
-    timeline: '16h30 - 20h',
-  },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'store';
+import { getSessions } from 'redux/actions/session';
 
 const MarketScreen = () => {
+  const { items: sessions, isLoading } = useSelector(
+    (state: RootState) => state.session,
+  );
+  const dispatch = useDispatch<any>();
+
+  useEffect(() => {
+    if (!isLoading && !sessions) {
+      getSessionsList();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getSessionsList = () => {
+    dispatch(getSessions());
+  };
+
   const renderItem = ({ item }: any) => <MarketItem {...item} />;
   return (
     <ScreenContainer
@@ -30,15 +31,12 @@ const MarketScreen = () => {
       hasBack={false}>
       <View style={styles.marketListContainer}>
         <FlatList
-          data={data}
+          data={sessions}
           keyExtractor={item => item.id.toString()}
           renderItem={renderItem}
+          refreshing={isLoading}
+          onRefresh={getSessionsList}
         />
-        <View style={styles.addBtn}>
-          <TouchableOpacity style={styles.btn}>
-            <PlusRounded width={48} height={48} fill={Colors.orange} />
-          </TouchableOpacity>
-        </View>
       </View>
     </ScreenContainer>
   );
@@ -54,14 +52,5 @@ const styles = StyleSheet.create({
   },
   marketListContainer: {
     flex: 1,
-  },
-  addBtn: {
-    position: 'absolute',
-    zIndex: 1,
-    right: -8,
-    bottom: -8,
-  },
-  btn: {
-    padding: 8,
   },
 });

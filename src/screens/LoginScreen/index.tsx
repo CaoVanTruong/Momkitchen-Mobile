@@ -8,14 +8,13 @@ import { Logo } from 'assets/svgs';
 import { LoginFormType } from 'schemas/loginSchema';
 import LoginForm from './components/LoginForm';
 import { useDispatch } from 'react-redux';
-import { login } from 'redux/slices/User';
+import { login } from 'redux/actions/user';
 
 const LoginScreen = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
 
   const onSubmit = (value: LoginFormType) => {
-    console.log(value);
-    dispatch(login());
+    dispatch(login({ email: value.email, password: value.password }));
   };
 
   return (

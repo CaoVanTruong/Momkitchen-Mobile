@@ -6,6 +6,7 @@ import { IDishType } from 'types/dish';
 import { PlusRounded } from 'assets/svgs';
 import { Colors } from 'constants';
 import AddDishTypeForm from './AddDishTypeForm';
+import { AddDishTypeFormType } from 'schemas/dishSchemas';
 
 const TYPES: IDishType[] = [
   {
@@ -31,7 +32,7 @@ const TYPES: IDishType[] = [
 ];
 
 const DishTypeScreen = () => {
-  const [modalVisible, setModalVisibility] = useState(true);
+  const [modalVisible, setModalVisibility] = useState(false);
 
   const renderItem = ({ item }: { item: IDishType }) => (
     <DishTypeItem
@@ -44,6 +45,11 @@ const DishTypeScreen = () => {
 
   const onAddTypeItem = () => {
     setModalVisibility(true);
+  };
+
+  const handleSubmit = (value: AddDishTypeFormType) => {
+    setModalVisibility(false);
+    TYPES.push(value as any);
   };
 
   return (
@@ -61,6 +67,7 @@ const DishTypeScreen = () => {
       <AddDishTypeForm
         visible={modalVisible}
         onClose={() => setModalVisibility(false)}
+        onSubmit={handleSubmit}
       />
     </>
   );

@@ -22,3 +22,4 @@ export { default as UserPlaceholder } from './UserPlaceholder';
 export { default as Dish } from './Dish';
 export { default as Meal } from './Meal';
 export { default as Noodle } from './Noodle';
+export { default as ImagePlaceholder } from './ImagePlaceholder';

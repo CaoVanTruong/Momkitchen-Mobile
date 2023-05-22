@@ -1,9 +1,9 @@
 /* eslint-disable react/no-unstable-nested-components */
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { registrationConfig } from 'types/navigationConfig';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
@@ -19,6 +19,7 @@ import {
 } from 'screens/chef';
 import { Home, Kitchen, List, Market, User } from 'assets/svgs';
 import { Colors } from 'constants';
+import { getCacheUserState } from 'redux/actions/user';
 
 const ChefTab = createBottomTabNavigator();
 const ChefStack = createStackNavigator();
@@ -107,7 +108,12 @@ const LoginNavigator = () => (
 );
 
 const Navigation = () => {
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user.user);
+  const dispatch = useDispatch<any>();
+
+  useLayoutEffect(() => {
+    dispatch(getCacheUserState());
+  });
 
   const renderApp = (() => {
     if (!user || !user.role) {
