@@ -5,15 +5,18 @@ import MarketItem from './components/MarketItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { getSessions } from 'redux/actions/session';
+import { useNavigation } from '@react-navigation/native';
+import { ISession } from 'types/session';
 
 const MarketScreen = () => {
   const { items: sessions, isLoading } = useSelector(
     (state: RootState) => state.session,
   );
   const dispatch = useDispatch<any>();
+  const navigation = useNavigation<any>();
 
   useEffect(() => {
-    if (!isLoading && !sessions) {
+    if (!isLoading && !sessions.length) {
       getSessionsList();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -23,7 +26,14 @@ const MarketScreen = () => {
     dispatch(getSessions());
   };
 
-  const renderItem = ({ item }: any) => <MarketItem {...item} />;
+  const onItemPress = (sessionId: number) => {
+    navigation.navigate('marketDetail', { sessionId });
+  };
+
+  const renderItem = ({ item }: { item: ISession }) => (
+    <MarketItem {...item} onPress={() => onItemPress(item.id)} />
+  );
+
   return (
     <ScreenContainer
       title="Market Sessions"

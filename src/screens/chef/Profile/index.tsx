@@ -11,7 +11,7 @@ import { RootState } from 'store';
 
 const SettingsScreen = () => {
   const dispatch = useDispatch<any>();
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user.user);
 
   const onLogout = () => {
     dispatch(logout());
@@ -33,7 +33,7 @@ const SettingsScreen = () => {
             color={Colors.orange}
             style={styles.infoIcon}
           />
-          <Text style={styles.infoContent}>{user.name}</Text>
+          <Text style={styles.infoContent}>{user!.name}</Text>
         </View>
         <View style={styles.infoRow}>
           <Icon
@@ -42,7 +42,7 @@ const SettingsScreen = () => {
             color={Colors.orange}
             style={styles.infoIcon}
           />
-          <Text style={styles.infoContent}>{user.email}</Text>
+          <Text style={styles.infoContent}>{user!.email}</Text>
         </View>
         <View style={styles.infoRow}>
           <Icon
@@ -51,7 +51,7 @@ const SettingsScreen = () => {
             color={Colors.orange}
             style={styles.infoIcon}
           />
-          <Text style={styles.infoContent}>{user.phone}</Text>
+          <Text style={styles.infoContent}>{user!.phone}</Text>
         </View>
         <View style={styles.infoRow}>
           <Icon
@@ -60,7 +60,7 @@ const SettingsScreen = () => {
             color={Colors.orange}
             style={styles.infoIcon}
           />
-          <Text style={styles.infoContent}>{user.address}</Text>
+          <Text style={styles.infoContent}>{user!.address}</Text>
         </View>
       </View>
       <View style={styles.actionContainer}>

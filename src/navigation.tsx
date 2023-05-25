@@ -13,6 +13,7 @@ import {
   FoodPackageScreen,
   FoodStyleScreen,
   KitchenScreen,
+  MarketDetailScreen,
   MarketScreen,
   OrderScreen,
   ProfileScreen,
@@ -20,9 +21,10 @@ import {
 import { Home, Kitchen, List, Market, User } from 'assets/svgs';
 import { Colors } from 'constants';
 import { getCacheUserState } from 'redux/actions/user';
+import { ChefStackParamList } from 'types/navigation';
 
 const ChefTab = createBottomTabNavigator();
-const ChefStack = createStackNavigator();
+const ChefStack = createStackNavigator<ChefStackParamList>();
 const LoginStack = createStackNavigator();
 
 const ChefTabNavigator = () => (
@@ -89,6 +91,7 @@ const ChefNavigator = () => (
     <ChefStack.Screen name="dishes" component={DishesScreen} />
     <ChefStack.Screen name="foodPackage" component={FoodPackageScreen} />
     <ChefStack.Screen name="foodStyle" component={FoodStyleScreen} />
+    <ChefStack.Screen name="marketDetail" component={MarketDetailScreen} />
   </ChefStack.Navigator>
 );
 

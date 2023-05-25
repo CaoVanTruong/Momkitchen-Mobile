@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Header';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
+  ActivityIndicator,
   StyleProp,
   StyleSheet,
   TextStyle,
@@ -10,12 +11,14 @@ import {
 } from 'react-native';
 import { Colors } from 'constants';
 import LinearGradient from 'react-native-linear-gradient';
+import { Overlay } from '@rneui/themed';
 
 interface ScreenContainerProps {
   title?: string;
   headerShown?: boolean;
   hasGradientBg?: boolean;
   hasBack?: boolean;
+  isLoading?: boolean;
   gradientColors?: string[];
   rightIcon?: React.ReactNode;
   titleAlignment?: 'left' | 'right' | 'center';
@@ -30,6 +33,7 @@ interface ScreenContainerProps {
 
 const ScreenContainer = (props: ScreenContainerProps) => {
   const {
+    isLoading = false,
     hasGradientBg = false,
     gradientColors = Colors.gradient_1,
     headerStyle,
@@ -43,6 +47,12 @@ const ScreenContainer = (props: ScreenContainerProps) => {
     <SafeAreaView style={[styles.container, containerStyle]}>
       <Header containerStyle={headerStyle} {...headerProps} />
       <View style={bodyContainerStyle}>{children}</View>
+      <Overlay
+        isVisible={isLoading}
+        statusBarTranslucent
+        style={styles.loadingContainer}>
+        <ActivityIndicator size={'large'} />
+      </Overlay>
     </SafeAreaView>
   );
 
@@ -65,5 +75,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  loadingContainer: {
+    backgroundColor: 'transparent',
   },
 });

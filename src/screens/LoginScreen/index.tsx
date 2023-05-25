@@ -1,42 +1,42 @@
 import React from 'react';
 import { Text } from '@rneui/themed';
 import { StyleSheet, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Dimensions, Colors } from 'constants';
 import { Logo } from 'assets/svgs';
 import { LoginFormType } from 'schemas/loginSchema';
 import LoginForm from './components/LoginForm';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from 'redux/actions/user';
+import { ScreenContainer } from 'components';
+import { RootState } from 'store';
 
 const LoginScreen = () => {
   const dispatch = useDispatch<any>();
+
+  const isLoading = useSelector((state: RootState) => state.user.isLoading);
 
   const onSubmit = (value: LoginFormType) => {
     dispatch(login({ email: value.email, password: value.password }));
   };
 
   return (
-    <LinearGradient colors={Colors.gradient_1} style={styles.container}>
-      <SafeAreaView style={styles.contentWrapper}>
-        <View style={styles.content}>
-          <Text h2>Mom - Kitchen</Text>
-          <View style={styles.imageWrapper}>
-            {/* <Image
-              source={{ uri: 'http://via.placeholder.com/640x360' }}
-              style={styles.image}
-              resizeMode="cover"
-            /> */}
-            <Logo
-              width={Dimensions.responsiveHeight(221)}
-              height={Dimensions.responsiveWidth(248)}
-            />
-          </View>
+    <ScreenContainer
+      isLoading={isLoading}
+      hasGradientBg
+      gradientColors={Colors.gradient_1}
+      bodyContainerStyle={styles.contentWrapper}
+      headerShown={false}>
+      <View style={styles.content}>
+        <Text h2>Mom - Kitchen</Text>
+        <View style={styles.imageWrapper}>
+          <Logo
+            width={Dimensions.responsiveHeight(221)}
+            height={Dimensions.responsiveWidth(248)}
+          />
         </View>
-        <LoginForm onSubmit={onSubmit} />
-      </SafeAreaView>
-    </LinearGradient>
+      </View>
+      <LoginForm onSubmit={onSubmit} />
+    </ScreenContainer>
   );
 };
 

@@ -13,6 +13,8 @@ export const getSessions = createAsyncThunk<ISession[]>(
 
       if (res.status === API_STATUS.OK && res.data.isSuccess) {
         return res.data.message;
+      } else {
+        rejectWithValue('Error orcurred');
       }
     } catch (error: any) {
       rejectWithValue(error.message);

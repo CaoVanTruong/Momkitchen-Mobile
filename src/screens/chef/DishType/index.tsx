@@ -1,5 +1,5 @@
 import { ScreenContainer } from 'components';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import DishTypeItem from './DishTypeItem';
 import { IDishType } from 'types/dish';
@@ -7,38 +7,38 @@ import { PlusRounded } from 'assets/svgs';
 import { Colors } from 'constants';
 import AddDishTypeForm from './AddDishTypeForm';
 import { AddDishTypeFormType } from 'schemas/dishSchemas';
-
-const TYPES: IDishType[] = [
-  {
-    id: '001',
-    name: 'Soup',
-    description: 'Lorem ipsum dolor sit amet consectetur adip',
-  },
-  {
-    id: '002',
-    name: 'Rice',
-    description: 'Lorem ipsum dolor sit amet consectetur adip',
-  },
-  {
-    id: '003',
-    name: 'Bistro',
-    description: 'Lorem ipsum dolor sit amet consectetur adip',
-  },
-  {
-    id: '004',
-    name: 'Beer',
-    description: 'Lorem ipsum dolor sit amet consectetur adip',
-  },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'store';
+import {
+  addDishTypes,
+  getDishTypes,
+  removeDishTypes,
+} from 'redux/actions/market';
 
 const DishTypeScreen = () => {
+  const { dishTypes, isLoading } = useSelector(
+    (state: RootState) => state.market,
+  );
+  const dispatch = useDispatch<any>();
+
+  const fetchDishTypes = () => {
+    dispatch(getDishTypes());
+  };
+
+  useEffect(() => {
+    fetchDishTypes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [modalVisible, setModalVisibility] = useState(false);
 
   const renderItem = ({ item }: { item: IDishType }) => (
     <DishTypeItem
       key={item.id}
       onPress={() => {}}
-      onRemove={() => {}}
+      onRemove={() => {
+        onRemoveTypeItem(item.id);
+      }}
       {...item}
     />
   );
@@ -47,18 +47,27 @@ const DishTypeScreen = () => {
     setModalVisibility(true);
   };
 
+  const onRemoveTypeItem = (id: number) => {
+    dispatch(removeDishTypes(id)).unwrap().then(fetchDishTypes);
+  };
+
   const handleSubmit = (value: AddDishTypeFormType) => {
     setModalVisibility(false);
-    TYPES.push(value as any);
+    dispatch(addDishTypes(value)).unwrap().then(fetchDishTypes);
   };
 
   return (
     <>
-      <ScreenContainer title="Dish Type" bodyContainerStyle={styles.container}>
+      <ScreenContainer
+        isLoading={isLoading}
+        title="Dish Type"
+        bodyContainerStyle={styles.container}>
         <FlatList
-          data={TYPES}
-          keyExtractor={item => item.id}
+          data={dishTypes}
+          keyExtractor={item => item.id.toString()}
           renderItem={renderItem}
+          onRefresh={fetchDishTypes}
+          refreshing={false}
         />
         <TouchableOpacity style={styles.overlayBtn} onPress={onAddTypeItem}>
           <PlusRounded width={48} height={48} fill={Colors.darkGreen} />

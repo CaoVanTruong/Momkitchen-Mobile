@@ -47,6 +47,8 @@ export const login = createAsyncThunk<IUser, LoginFormType>(
             AsyncStorage.setItem('loginData', JSON.stringify(data));
             resolve(data);
           }
+        } else {
+          reject('Error orcurred');
         }
       } catch (error) {
         reject(error);

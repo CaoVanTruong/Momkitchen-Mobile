@@ -23,3 +23,5 @@ export { default as Dish } from './Dish';
 export { default as Meal } from './Meal';
 export { default as Noodle } from './Noodle';
 export { default as ImagePlaceholder } from './ImagePlaceholder';
+export { default as ChevronDown } from './ChevronDown';
+export { default as ChevronUp } from './ChevronUp';
