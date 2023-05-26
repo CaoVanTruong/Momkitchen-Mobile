@@ -7,7 +7,7 @@ export type ISession = {
   id: number;
   startTime: string;
   endTime: string;
-  createdDate: string;
+  createDate: string;
   status: boolean;
   title: string;
 };

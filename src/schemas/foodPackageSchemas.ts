@@ -21,6 +21,21 @@ const addFoodPackageSchema = yup.object({
   }),
 });
 
-export default { addFoodPackageSchema };
+const addFoodPackageToSessionSchema = yup.object({
+  foodPackageId: yup.number().required('Food package can not be null'),
+  price: yup
+    .number()
+    .required('Please enter a food package price')
+    .min(1, 'Price must be greater than zero'),
+  quantity: yup
+    .number()
+    .required('Please enter food package quantity')
+    .min(1, 'Quantity must be greater than zero'),
+});
+
+export default { addFoodPackageSchema, addFoodPackageToSessionSchema };
 
 export type AddFoodPackageFormType = yup.InferType<typeof addFoodPackageSchema>;
+export type AddFoodPackageToSessionFormType = yup.InferType<
+  typeof addFoodPackageToSessionSchema
+>;

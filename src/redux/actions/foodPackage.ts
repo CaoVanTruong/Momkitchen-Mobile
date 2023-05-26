@@ -2,7 +2,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { API_STATUS } from 'constants/api';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { AddFoodPackageFormType } from 'schemas/foodPackageSchemas';
-import { IFoodPackage } from 'types/foodPackage';
+import {
+  IAddFoodPackageToSessionRequest,
+  IFoodPackage,
+  IFoodPackageInSession,
+} from 'types/foodPackage';
 import { IUserState } from 'types/user';
 import api from 'utils/api';
 import { storage } from 'utils/firebase';
@@ -10,6 +14,7 @@ import { storage } from 'utils/firebase';
 const FOOD_PACKAGES = 'foodPackages';
 const ADD_FOOD_PACKAGES = 'addFoodPackages';
 const FOOD_PACKAGES_IN_SESSION = 'foodPackagesInSessions';
+const ADD_FOOD_PACKAGES_IN_SESSION = 'addFoodPackagesInSessions';
 
 export const getFoodPackages = createAsyncThunk<IFoodPackage[]>(
   FOOD_PACKAGES,
@@ -76,12 +81,12 @@ export const addFoodPackage = createAsyncThunk<number, AddFoodPackageFormType>(
 );
 
 export const getFoodPackagesInSession = createAsyncThunk<
-  IFoodPackage[],
+  IFoodPackageInSession[],
   number
 >(
   FOOD_PACKAGES_IN_SESSION,
   sessionId =>
-    new Promise(async (resolve, reject) => {
+    new Promise<IFoodPackageInSession[]>(async (resolve, reject) => {
       try {
         const res = await api.get(`foodpackageinsessions/session/${sessionId}`);
 
@@ -92,6 +97,27 @@ export const getFoodPackagesInSession = createAsyncThunk<
         }
       } catch (error) {
         reject(error);
+      }
+    }),
+);
+
+export const addFoodPackageToSession = createAsyncThunk<
+  string,
+  IAddFoodPackageToSessionRequest
+>(
+  ADD_FOOD_PACKAGES_IN_SESSION,
+  reqData =>
+    new Promise(async (resolve, reject) => {
+      try {
+        const res = await api.post('foodpackageinsessions', reqData);
+
+        if (res.status === API_STATUS.OK && res.data.isSuccess) {
+          resolve(res.data.isSuccess);
+        } else {
+          reject('Error orcurred');
+        }
+      } catch (error: any) {
+        reject(error.message);
       }
     }),
 );

@@ -13,8 +13,9 @@ interface MarketItemProps extends ISession {
 }
 
 const MarketItem = ({
+  id,
   title,
-  createdDate,
+  createDate,
   startTime,
   endTime,
   onPress,
@@ -24,9 +25,9 @@ const MarketItem = ({
       <TouchableOpacity onPress={onPress} style={styles.actionContainer}>
         <View style={styles.marketItemContainer}>
           <View style={styles.contentWrapper}>
-            <Text style={styles.title}>{title || 'No Title'}</Text>
+            <Text style={styles.title}>{title || `Session #${id}`}</Text>
             <Text style={styles.createdDate}>
-              Created Date: {dayjs(createdDate).format(DEFAULT_DATE_FORMAT)}
+              Created Date: {dayjs(createDate).format(DEFAULT_DATE_FORMAT)}
             </Text>
             <Text style={styles.timeline}>
               {`Timeline: ${dayjs(startTime).format(

@@ -16,7 +16,7 @@ interface FoodPackageItemProps {
   quantity: number;
   remainQuantity: number;
   createDate: string;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const FoodPackageItem = ({
@@ -35,7 +35,7 @@ const FoodPackageItem = ({
         <View style={styles.content}>
           <View style={styles.imageWrapper}>
             {image ? (
-              <Image source={{ uri: image }} />
+              <Image source={{ uri: image }} style={styles.image} />
             ) : (
               <ImagePlaceholder width={48} height={48} fill={Colors.orange} />
             )}
@@ -79,6 +79,11 @@ const styles = StyleSheet.create({
   },
   imageWrapper: {
     marginRight: 16,
+  },
+  image: {
+    width: 48,
+    height: 48,
+    resizeMode: 'contain',
   },
   info: {
     flex: 1,
