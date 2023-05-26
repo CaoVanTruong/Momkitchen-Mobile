@@ -1,9 +1,12 @@
 import { createAsyncThunk, isRejectedWithValue } from '@reduxjs/toolkit';
 import { API_STATUS } from 'constants/api';
-import { IDish, IDishRequest, IDishType } from 'types/dish';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { AddDishFormType } from 'schemas/dishSchemas';
+import { IDish, IDishType } from 'types/dish';
 import { IFoodStyle } from 'types/foodStyle';
 import { IUserState } from 'types/user';
 import api from 'utils/api';
+import { storage } from 'utils/firebase';
 
 const DISH_TYPES = 'dishTypes';
 const ADD_DISH_TYPES = 'addDishTypes';
@@ -92,17 +95,31 @@ export const getDishes = createAsyncThunk<IDish[]>(
     }),
 );
 
-export const addDish = createAsyncThunk<IDish, IDishRequest>(
+export const addDish = createAsyncThunk<IDish, AddDishFormType>(
   ADD_DISH,
   (dishData, { getState }) =>
     new Promise(async (resolve, reject) => {
       try {
         const { user } = getState() as { user: IUserState };
-        const reqData = {
-          ...dishData,
+
+        const params = {
+          name: dishData.name,
+          dishTypeId: dishData.dishTypeId || null,
           chefId: user.user?.id,
         };
-        const res = await api.post('dishes', reqData);
+
+        let imgUrl = null;
+
+        if (dishData.image && dishData.image.uri) {
+          const imageRef = ref(storage, `image/${dishData.image.fileName}`);
+          const img = await fetch(dishData.image.uri);
+          const bytes = await img.blob();
+          await uploadBytes(imageRef, bytes);
+          imgUrl = await getDownloadURL(imageRef);
+        }
+
+        const res = await api.post('dishes', { ...params, image: imgUrl });
+
         if (res.status === API_STATUS.OK && res.data.isSuccess) {
           resolve(res.data.message);
         } else {

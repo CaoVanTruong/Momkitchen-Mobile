@@ -1,6 +1,7 @@
 import { Image, Text } from '@rneui/themed';
 import { ImagePlaceholder } from 'assets/svgs';
-import { Colors, Dimensions } from 'constants';
+import Colors from 'constants/colors';
+import Dimension from 'constants/dimension';
 import shadowStyle from 'constants/shadowStyle';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -17,7 +18,7 @@ const DishItem = ({ name, dishType, image, onPress }: DishItemProps) => {
         <View style={styles.content}>
           <View style={styles.imageWrapper}>
             {image ? (
-              <Image source={{ uri: image }} />
+              <Image source={{ uri: image }} style={styles.image} />
             ) : (
               <ImagePlaceholder width={48} height={48} fill={Colors.orange} />
             )}
@@ -39,7 +40,7 @@ export default DishItem;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
-    borderRadius: Dimensions.RADIUS_2,
+    borderRadius: Dimension.RADIUS_2,
     marginBottom: 12,
     ...shadowStyle.ELEVATOR_4,
   },
@@ -70,6 +71,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     backgroundColor: Colors.lightGreen,
-    borderRadius: Dimensions.RADIUS_2,
+    borderRadius: Dimension.RADIUS_2,
+  },
+  image: {
+    width: 48,
+    height: 48,
+    resizeMode: 'contain',
   },
 });

@@ -1,6 +1,6 @@
 import { Text } from '@rneui/themed';
 import { ScreenContainer } from 'components';
-import { Colors } from 'constants';
+import Colors from 'constants/colors';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 

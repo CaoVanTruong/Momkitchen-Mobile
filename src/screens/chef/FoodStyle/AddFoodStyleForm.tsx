@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from '@rneui/themed';
 import { Modal } from 'components';
-import { Colors } from 'constants';
+import Colors from 'constants/colors';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
@@ -24,7 +24,6 @@ const AddFoodStyleForm = ({
   });
 
   const onSubmitForm = (value: AddFoodStyleFormType) => {
-    console.log(value);
     onSubmit(value);
     reset();
   };

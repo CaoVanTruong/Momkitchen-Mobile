@@ -1,50 +1,46 @@
 import { Text } from '@rneui/themed';
 import { Bell, Cash, List } from 'assets/svgs';
-import { Colors, Dimensions } from 'constants';
-import React from 'react';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { OrderItem, ScreenContainer } from 'components';
 import { IOrderItem } from 'types/order';
-
-const MOCK_DATA: IOrderItem[] = [
-  {
-    id: '1',
-    name: 'Recent Order Item 1',
-    phone: '0123456789',
-    price: 50000,
-    time: '2023-05-04T10:55:24Z',
-    status: 'Ordering',
-  },
-  {
-    id: '2',
-    name: 'Recent Order Item 2',
-    phone: '0123456789',
-    price: 50000,
-    time: '2023-05-04T10:55:24Z',
-    status: 'Ordering',
-  },
-  {
-    id: '3',
-    name: 'Recent Order Item 3',
-    phone: '0123456789',
-    price: 50000,
-    time: '2023-05-04T10:55:24Z',
-    status: 'Ordering',
-  },
-  {
-    id: '4',
-    name: 'Recent Order Item 4',
-    phone: '0123456789',
-    price: 50000,
-    time: '2023-05-04T10:55:24Z',
-    status: 'Ordering',
-  },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'store';
+import {
+  getNumOfOrders,
+  getRecentOrders,
+  getRevenue,
+} from 'redux/actions/chefHome';
+import Colors from 'constants/colors';
+import Dimension from 'constants/dimension';
 
 const DashboardScreen = () => {
-  const onNotificationPress = () => {
-    console.log('notificationPress');
+  const { isLoading, revenue, orders, numberOfOrders } = useSelector(
+    (state: RootState) => state.chefHome,
+  );
+
+  const dispatch = useDispatch<any>();
+
+  const fetchRevenue = () => {
+    dispatch(getRevenue());
   };
+
+  const fetchNumOfOrders = () => {
+    dispatch(getNumOfOrders());
+  };
+
+  const fetchRecentOrders = () => {
+    dispatch(getRecentOrders());
+  };
+
+  useEffect(() => {
+    fetchRecentOrders();
+    fetchRevenue();
+    fetchNumOfOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onNotificationPress = () => {};
 
   const onConfirm = (id: string) => {
     if (!id) {
@@ -60,6 +56,7 @@ const DashboardScreen = () => {
   return (
     <ScreenContainer
       hasGradientBg
+      isLoading={isLoading}
       title="Home"
       hasBack={false}
       bodyContainerStyle={styles.container}
@@ -82,7 +79,7 @@ const DashboardScreen = () => {
             </View>
             <View style={styles.statisticContent}>
               <Text style={styles.statisticLabel}>Orders</Text>
-              <Text style={styles.statisticValue}>15</Text>
+              <Text style={styles.statisticValue}>{numberOfOrders}</Text>
             </View>
           </View>
           <View
@@ -95,7 +92,7 @@ const DashboardScreen = () => {
             </View>
             <View style={styles.statisticContent}>
               <Text style={styles.statisticLabel}>Revenue</Text>
-              <Text style={styles.statisticValue}>2.400.000 VND</Text>
+              <Text style={styles.statisticValue}>{`${revenue} VND`}</Text>
             </View>
           </View>
         </View>
@@ -105,12 +102,18 @@ const DashboardScreen = () => {
           <Text style={styles.headingTitle}>Recent Orders</Text>
         </View>
         <View style={styles.dynamicContainer}>
-          <FlatList
-            data={MOCK_DATA}
-            keyExtractor={item => item.id.toString()}
-            renderItem={renderOrderItems}
-            style={[styles.listWrapper, styles.ph_24]}
-          />
+          {orders.length ? (
+            <FlatList
+              data={orders}
+              keyExtractor={item => item.id}
+              renderItem={renderOrderItems}
+              style={[styles.listWrapper, styles.ph_24]}
+            />
+          ) : (
+            <View style={styles.noOrder}>
+              <Text>No recent orders</Text>
+            </View>
+          )}
         </View>
       </View>
     </ScreenContainer>
@@ -150,11 +153,11 @@ const styles = StyleSheet.create({
   },
   statisticItem: {
     backgroundColor: Colors.white,
-    width: Dimensions.SCREEN_WIDTH / 2 - 36,
+    width: Dimension.SCREEN_WIDTH / 2 - 36,
     paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: Dimensions.RADIUS_2,
+    borderRadius: Dimension.RADIUS_2,
   },
   statisticContent: {
     marginTop: 8,
@@ -174,6 +177,12 @@ const styles = StyleSheet.create({
   listWrapper: {
     paddingVertical: 4,
     backgroundColor: Colors.white,
-    borderRadius: Dimensions.RADIUS_2,
+    borderRadius: Dimension.RADIUS_2,
+  },
+  noOrder: {
+    flex: 1,
+    backgroundColor: Colors.white,
+    paddingHorizontal: 24,
+    paddingVertical: 4,
   },
 });

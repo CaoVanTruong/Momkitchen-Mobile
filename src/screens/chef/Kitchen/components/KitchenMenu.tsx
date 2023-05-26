@@ -1,5 +1,6 @@
 import { Text } from '@rneui/themed';
-import { Colors, Dimensions } from 'constants';
+import Colors from 'constants/colors';
+import Dimension from 'constants/dimension';
 import shadowStyle from 'constants/shadowStyle';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -25,10 +26,10 @@ export default KitchenMenu;
 
 const styles = StyleSheet.create({
   container: {
-    width: Dimensions.SCREEN_WIDTH / 2 - 48,
-    height: Dimensions.SCREEN_WIDTH / 2 - 48,
+    width: Dimension.SCREEN_WIDTH / 2 - 48,
+    height: Dimension.SCREEN_WIDTH / 2 - 48,
     backgroundColor: Colors.white,
-    borderRadius: Dimensions.RADIUS_3,
+    borderRadius: Dimension.RADIUS_3,
     margin: 12,
     borderColor: Colors.lightGreen,
     borderWidth: 1,
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
   },
   touchableMenu: {
     flex: 1,
-    borderRadius: Dimensions.RADIUS_3,
+    borderRadius: Dimension.RADIUS_3,
     justifyContent: 'center',
     alignItems: 'center',
   },

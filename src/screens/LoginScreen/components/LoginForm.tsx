@@ -3,10 +3,11 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Colors, Dimensions } from 'constants';
+import Colors from 'constants/colors';
 import { loginSchema } from 'schemas';
 import type { LoginFormType } from 'schemas/loginSchema';
 import { Envelop, Lock } from 'assets/svgs';
+import Dimension from 'constants/dimension';
 
 interface LoginFormProps {
   onSubmit: (value: LoginFormType) => void;
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     marginTop: 8,
     paddingVertical: 12,
-    borderRadius: Dimensions.RADIUS_2,
+    borderRadius: Dimension.RADIUS_2,
     backgroundColor: Colors.pink,
   },
   btnTitle: {

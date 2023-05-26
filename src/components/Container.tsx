@@ -9,9 +9,10 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { Colors } from 'constants';
+
 import LinearGradient from 'react-native-linear-gradient';
 import { Overlay } from '@rneui/themed';
+import Colors from 'constants/colors';
 
 interface ScreenContainerProps {
   title?: string;

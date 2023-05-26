@@ -1,7 +1,8 @@
 import { Button, Text } from '@rneui/themed';
 import { UserPlaceholder } from 'assets/svgs';
 import { ScreenContainer } from 'components';
-import { Colors, Dimensions } from 'constants';
+import Colors from 'constants/colors';
+import Dimension from 'constants/dimension';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
   logoutBtn: {
     marginTop: 8,
     paddingVertical: 12,
-    borderRadius: Dimensions.RADIUS_2,
+    borderRadius: Dimension.RADIUS_2,
     backgroundColor: Colors.red,
   },
   buttonTitle: {

@@ -1,6 +1,8 @@
 import { Text } from '@rneui/themed';
 import { Clock, Coin, Phone } from 'assets/svgs';
-import { Colors, DEFAULT_DATETIME_FORMAT, Dimensions } from 'constants';
+import Colors from 'constants/colors';
+import Dimension from 'constants/dimension';
+import { DEFAULT_DATETIME_FORMAT } from 'constants/format';
 import shadowStyle from 'constants/shadowStyle';
 import dayjs from 'dayjs';
 import React from 'react';
@@ -14,13 +16,16 @@ interface OrderItemProps extends IOrderItem {
 
 const OrderItem = ({
   id,
-  name,
-  phone,
-  price,
-  time,
+  date,
+  customer,
+  orderDetails,
   status,
   onConfirm,
 }: OrderItemProps) => {
+  const totalPrice = orderDetails.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0,
+  );
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
@@ -33,19 +38,19 @@ const OrderItem = ({
           />
           <Text style={styles.id}>{id}</Text>
         </View>
-        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.name}>{`Order of ${customer.name}`}</Text>
         <View style={styles.infoWrapper}>
           <Phone width={24} height={24} style={styles.infoIcon} />
-          <Text style={styles.phone}>{phone}</Text>
+          <Text style={styles.phone}>{customer.phone}</Text>
         </View>
         <View style={styles.infoWrapper}>
           <Coin width={24} height={24} style={styles.infoIcon} />
-          <Text style={styles.price}>{`${price} VND`}</Text>
+          <Text style={styles.price}>{`${totalPrice} VND`}</Text>
         </View>
         <View style={styles.infoWrapper}>
           <Clock width={24} height={24} style={styles.infoIcon} />
           <Text style={styles.time}>
-            {dayjs(time).format(DEFAULT_DATETIME_FORMAT)}
+            {dayjs(date).format(DEFAULT_DATETIME_FORMAT)}
           </Text>
         </View>
       </View>
@@ -68,7 +73,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderWidth: 1,
     borderColor: Colors.black,
-    borderRadius: Dimensions.RADIUS_3,
+    borderRadius: Dimension.RADIUS_3,
     marginBottom: 12,
     ...shadowStyle.ELEVATOR_4,
   },
@@ -87,7 +92,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     backgroundColor: Colors.lightGreen,
-    borderRadius: Dimensions.RADIUS_2,
+    borderRadius: Dimension.RADIUS_2,
   },
   confirmTitle: {
     fontWeight: 'bold',

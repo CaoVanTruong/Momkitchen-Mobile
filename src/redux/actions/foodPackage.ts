@@ -1,10 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { API_STATUS } from 'constants/api';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { AddFoodPackageFormType } from 'schemas/foodPackageSchemas';
 import { IFoodPackage } from 'types/foodPackage';
 import { IUserState } from 'types/user';
 import api from 'utils/api';
+import { storage } from 'utils/firebase';
 
 const FOOD_PACKAGES = 'foodPackages';
+const ADD_FOOD_PACKAGES = 'addFoodPackages';
 const FOOD_PACKAGES_IN_SESSION = 'foodPackagesInSessions';
 
 export const getFoodPackages = createAsyncThunk<IFoodPackage[]>(
@@ -22,6 +26,51 @@ export const getFoodPackages = createAsyncThunk<IFoodPackage[]>(
         }
       } catch (err) {
         reject(err);
+      }
+    }),
+);
+
+export const addFoodPackage = createAsyncThunk<number, AddFoodPackageFormType>(
+  ADD_FOOD_PACKAGES,
+  (pkgData, { getState }) =>
+    new Promise(async (resolve, reject) => {
+      try {
+        const { user } = getState() as { user: IUserState };
+
+        let imgUrl = null;
+
+        if (pkgData.image && pkgData.image.uri) {
+          const imageRef = ref(storage, `image/${pkgData.image.fileName}`);
+          const img = await fetch(pkgData.image.uri);
+          const bytes = await img.blob();
+          await uploadBytes(imageRef, bytes);
+          imgUrl = await getDownloadURL(imageRef);
+        }
+
+        const params = {
+          foodPackageRequest: {
+            name: pkgData.name,
+            image: imgUrl,
+            defaultPrice: pkgData.defaultPrice,
+            chefId: user.user?.id,
+            description: pkgData.description,
+            foodPackageStyleId: pkgData.foodPackageStyleId,
+          },
+          dishFoodPackageRequests: pkgData.dishes?.map(item => ({
+            dishId: item.dishId,
+            quantity: item.quantity,
+          })),
+        };
+
+        const res = await api.post('foodpackages', params);
+
+        if (res.status === API_STATUS.OK && res.data.isSuccess) {
+          resolve(res.data.message);
+        } else {
+          reject(res.data.message);
+        }
+      } catch (error: any) {
+        reject(error.message);
       }
     }),
 );

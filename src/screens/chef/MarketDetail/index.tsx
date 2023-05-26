@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native';
 import { ScreenContainer } from 'components';
-import { Colors } from 'constants';
+import Colors from 'constants/colors';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';

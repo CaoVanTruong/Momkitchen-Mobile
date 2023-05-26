@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Input, Text } from '@rneui/themed';
 import { ChevronDown, ChevronUp } from 'assets/svgs';
 import { Modal } from 'components';
-import { Colors } from 'constants';
+import Colors from 'constants/colors';
 import React from 'react';
 import { useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -11,6 +11,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import { dishSchemas } from 'schemas';
 import { AddDishFormType } from 'schemas/dishSchemas';
 import { IDishType } from 'types/dish';
+import UploadImage from './UploadImage';
 
 interface AddDishFormProps {
   visible: boolean;
@@ -32,7 +33,6 @@ const AddDishForm = ({
   });
 
   const onSubmitForm = (value: AddDishFormType) => {
-    console.log(value);
     onSubmit(value);
     reset();
     dropdownRef.current?.reset();
@@ -99,6 +99,7 @@ const AddDishForm = ({
           </View>
         )}
       />
+      <UploadImage control={control} />
     </Modal>
   );
 };

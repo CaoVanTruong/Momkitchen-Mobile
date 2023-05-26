@@ -7,7 +7,7 @@ import { RootState } from 'store';
 import { IDish } from 'types/dish';
 import { addDish, getDishTypes, getDishes } from 'redux/actions/market';
 import { PlusRounded } from 'assets/svgs';
-import { Colors } from 'constants';
+import Colors from 'constants/colors';
 import AddDishForm from './AddDishForm';
 import { AddDishFormType } from 'schemas/dishSchemas';
 
@@ -48,12 +48,7 @@ const DishesScreen = () => {
 
   const onAddDish = (values: AddDishFormType) => {
     setModalVisibility(false);
-    const params = {
-      name: values.name,
-      dishTypeId: values.dishTypeId || null,
-      image: null,
-    };
-    dispatch(addDish(params));
+    dispatch(addDish(values));
   };
 
   return (

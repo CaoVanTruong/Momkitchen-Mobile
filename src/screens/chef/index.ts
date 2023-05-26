@@ -8,3 +8,4 @@ export { default as DishTypeScreen } from './DishType';
 export { default as DishesScreen } from './Dishes';
 export { default as FoodPackageScreen } from './FoodPackage';
 export { default as FoodStyleScreen } from './FoodStyle';
+export { default as AddFoodPackageScreen } from './AddFoodPackage';

@@ -1,6 +1,7 @@
 import { Text } from '@rneui/themed';
 import { Times } from 'assets/svgs';
-import { Colors, Dimensions } from 'constants';
+import Colors from 'constants/colors';
+import Dimension from 'constants/dimension';
 import shadowStyle from 'constants/shadowStyle';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -40,7 +41,7 @@ export default FoodStyleItem;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
-    borderRadius: Dimensions.RADIUS_2,
+    borderRadius: Dimension.RADIUS_2,
     marginBottom: 12,
     ...shadowStyle.ELEVATOR_4,
   },

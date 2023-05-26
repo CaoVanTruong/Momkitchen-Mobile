@@ -1,6 +1,8 @@
 import { Image, Text } from '@rneui/themed';
 import { ImagePlaceholder } from 'assets/svgs';
-import { Colors, DEFAULT_DATE_FORMAT, Dimensions } from 'constants';
+import Colors from 'constants/colors';
+import Dimension from 'constants/dimension';
+import { DEFAULT_DATE_FORMAT } from 'constants/format';
 import shadowStyle from 'constants/shadowStyle';
 import dayjs from 'dayjs';
 import React from 'react';
@@ -62,7 +64,7 @@ export default FoodPackageItem;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
-    borderRadius: Dimensions.RADIUS_2,
+    borderRadius: Dimension.RADIUS_2,
     marginBottom: 12,
     ...shadowStyle.ELEVATOR_4,
   },

@@ -17,7 +17,7 @@ import {
 } from 'redux/actions/market';
 import AddFoodStyleForm from './AddFoodStyleForm';
 import { PlusRounded } from 'assets/svgs';
-import { Colors } from 'constants';
+import Colors from 'constants/colors';
 import { AddFoodStyleFormType } from 'schemas/dishSchemas';
 
 const FoodStyleScreen = () => {

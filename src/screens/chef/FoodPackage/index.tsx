@@ -1,14 +1,19 @@
 import { ScreenContainer } from 'components';
 import React, { useEffect } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFoodPackages } from 'redux/actions/foodPackage';
 import { RootState } from 'store';
 import { IFoodPackage } from 'types/foodPackage';
 import FoodPackageItem from './FoodPackageItem';
+import { PlusRounded } from 'assets/svgs';
+import Colors from 'constants/colors';
+import { useNavigation } from '@react-navigation/native';
 
 const FoodPackageScreen = () => {
   const dispatch = useDispatch<any>();
+  const navigation = useNavigation<any>();
+
   const { items: listFoodPackages, isLoading } = useSelector(
     (state: RootState) => state.foodPackage,
   );
@@ -20,6 +25,10 @@ const FoodPackageScreen = () => {
 
   const getFoodPackagesList = () => {
     dispatch(getFoodPackages());
+  };
+
+  const onAddTypeItem = () => {
+    navigation.navigate('addFoodPackage');
   };
 
   const renderItem = ({ item }: { item: IFoodPackage }) => {
@@ -35,6 +44,9 @@ const FoodPackageScreen = () => {
         refreshing={isLoading}
         onRefresh={getFoodPackagesList}
       />
+      <TouchableOpacity style={styles.overlayBtn} onPress={onAddTypeItem}>
+        <PlusRounded width={48} height={48} fill={Colors.darkGreen} />
+      </TouchableOpacity>
     </ScreenContainer>
   );
 };
@@ -46,5 +58,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 24,
     paddingVertical: 16,
+  },
+  overlayBtn: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
   },
 });

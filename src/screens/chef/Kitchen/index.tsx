@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import KitchenMenu from './components/KitchenMenu';
 import { useNavigation } from '@react-navigation/native';
 import { Category, Dish, Meal, Noodle } from 'assets/svgs';
-import { Colors } from 'constants';
+import Colors from 'constants/colors';
 
 const MENUS = [
   {

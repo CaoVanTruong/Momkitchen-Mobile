@@ -1,71 +1,61 @@
 import { Text } from '@rneui/themed';
-import { Times } from 'assets/svgs';
 import Colors from 'constants/colors';
 import Dimension from 'constants/dimension';
-
-import shadowStyle from 'constants/shadowStyle';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
-interface DishTypeItemProps {
+interface SelectableDishItemProps {
   name: string;
-  description: string;
+  dishType?: string;
   onPress: () => void;
-  onRemove: () => void;
 }
 
-const DishTypeItem = ({
+const SelectableDishItem = ({
   name,
-  description,
+  dishType,
   onPress,
-  onRemove,
-}: DishTypeItemProps) => {
+}: SelectableDishItemProps) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPress} style={styles.touchableItem}>
-        <View style={styles.content}>
+        <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
-          <Text style={styles.desc}>{description}</Text>
-        </View>
-        <View style={styles.action}>
-          <TouchableOpacity onPress={onRemove} style={styles.actionBtn}>
-            <Times width={24} height={24} fill={Colors.red} />
-          </TouchableOpacity>
+          {!!dishType && <Text style={styles.desc}>{dishType}</Text>}
         </View>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default DishTypeItem;
+export default SelectableDishItem;
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     borderRadius: Dimension.RADIUS_2,
-    marginBottom: 12,
-    ...shadowStyle.ELEVATOR_4,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   touchableItem: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     paddingVertical: 8,
   },
-  content: {},
-  action: {
-    position: 'absolute',
-    right: 4,
-    top: 12,
-  },
-  actionBtn: {
-    padding: 8,
+  info: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
   },
   name: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     marginBottom: 8,
   },
   desc: {
     fontSize: 12,
     color: Colors.black,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: Colors.lightGreen,
+    borderRadius: Dimension.RADIUS_2,
   },
 });

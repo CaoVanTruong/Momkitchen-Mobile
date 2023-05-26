@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { Text } from '@rneui/themed';
 import { LeftArrow } from 'assets/svgs';
-import { Colors, ShadowStyles } from 'constants';
+import Colors from 'constants/colors';
+import ShadowStyles from 'constants/shadowStyle';
 import React from 'react';
 import {
   StyleProp,

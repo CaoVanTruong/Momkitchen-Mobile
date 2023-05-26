@@ -8,6 +8,10 @@ const addDishTypeSchema = yup.object({
 const addDishSchema = yup.object({
   name: yup.string().required('Please enter a dish name'),
   dishTypeId: yup.number(),
+  image: yup.object({
+    fileName: yup.string(),
+    uri: yup.string(),
+  }),
 });
 
 const addFoodStyleSchema = yup.object({

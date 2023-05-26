@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
+  AddFoodPackageScreen,
   DashboardScreen as ChefDashboardScreen,
   DishesScreen,
   DishTypeScreen,
@@ -19,9 +20,10 @@ import {
   ProfileScreen,
 } from 'screens/chef';
 import { Home, Kitchen, List, Market, User } from 'assets/svgs';
-import { Colors } from 'constants';
+
 import { getCacheUserState } from 'redux/actions/user';
 import { ChefStackParamList } from 'types/navigation';
+import Colors from 'constants/colors';
 
 const ChefTab = createBottomTabNavigator();
 const ChefStack = createStackNavigator<ChefStackParamList>();
@@ -92,6 +94,7 @@ const ChefNavigator = () => (
     <ChefStack.Screen name="foodPackage" component={FoodPackageScreen} />
     <ChefStack.Screen name="foodStyle" component={FoodStyleScreen} />
     <ChefStack.Screen name="marketDetail" component={MarketDetailScreen} />
+    <ChefStack.Screen name="addFoodPackage" component={AddFoodPackageScreen} />
   </ChefStack.Navigator>
 );
 

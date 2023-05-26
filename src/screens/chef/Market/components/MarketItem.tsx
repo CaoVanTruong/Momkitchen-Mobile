@@ -1,10 +1,7 @@
 import { Text } from '@rneui/themed';
-import {
-  Colors,
-  DEFAULT_DATE_FORMAT,
-  DEFAULT_TIME_FORMAT,
-  Dimensions,
-} from 'constants';
+import Colors from 'constants/colors';
+import Dimension from 'constants/dimension';
+import { DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT } from 'constants/format';
 import shadowStyle from 'constants/shadowStyle';
 import dayjs from 'dayjs';
 import React from 'react';
@@ -49,11 +46,11 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     marginBottom: 12,
-    borderRadius: Dimensions.RADIUS_2,
+    borderRadius: Dimension.RADIUS_2,
     ...shadowStyle.ELEVATOR_4,
   },
   actionContainer: {
-    borderRadius: Dimensions.RADIUS_2,
+    borderRadius: Dimension.RADIUS_2,
   },
   marketItemContainer: {
     justifyContent: 'center',
@@ -61,7 +58,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: Colors.white,
     padding: 12,
-    borderRadius: Dimensions.RADIUS_2,
+    borderRadius: Dimension.RADIUS_2,
   },
   imgWrapper: {
     alignSelf: 'center',

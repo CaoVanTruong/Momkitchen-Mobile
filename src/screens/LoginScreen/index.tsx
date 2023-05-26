@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from '@rneui/themed';
 import { StyleSheet, View } from 'react-native';
-import { Dimensions, Colors } from 'constants';
+import Colors from 'constants/colors';
 import { Logo } from 'assets/svgs';
 import { LoginFormType } from 'schemas/loginSchema';
 import LoginForm from './components/LoginForm';
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login } from 'redux/actions/user';
 import { ScreenContainer } from 'components';
 import { RootState } from 'store';
+import Dimension from 'constants/dimension';
 
 const LoginScreen = () => {
   const dispatch = useDispatch<any>();
@@ -30,8 +31,8 @@ const LoginScreen = () => {
         <Text h2>Mom - Kitchen</Text>
         <View style={styles.imageWrapper}>
           <Logo
-            width={Dimensions.responsiveHeight(221)}
-            height={Dimensions.responsiveWidth(248)}
+            width={Dimension.responsiveHeight(221)}
+            height={Dimension.responsiveWidth(248)}
           />
         </View>
       </View>
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   image: {
-    height: Dimensions.responsiveHeight(221),
-    width: Dimensions.responsiveWidth(248),
+    height: Dimension.responsiveHeight(221),
+    width: Dimension.responsiveWidth(248),
   },
 });

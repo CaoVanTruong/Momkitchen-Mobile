@@ -16,7 +16,7 @@ const RADIUS_2 = 8;
 const RADIUS_3 = 12;
 const RADIUS_4 = 24;
 
-export default {
+const Dimension = {
   responsiveHeight,
   responsiveWidth,
   SCREEN_HEIGHT,
@@ -26,3 +26,5 @@ export default {
   RADIUS_3,
   RADIUS_4,
 };
+
+export default Dimension;

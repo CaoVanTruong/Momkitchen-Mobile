@@ -1,4 +1,4 @@
-import { Regex } from 'constants';
+import Regex from 'constants/regexes';
 import * as yup from 'yup';
 
 const schema = yup.object({

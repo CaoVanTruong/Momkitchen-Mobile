@@ -4,7 +4,7 @@ import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import DishTypeItem from './DishTypeItem';
 import { IDishType } from 'types/dish';
 import { PlusRounded } from 'assets/svgs';
-import { Colors } from 'constants';
+import Colors from 'constants/colors';
 import AddDishTypeForm from './AddDishTypeForm';
 import { AddDishTypeFormType } from 'schemas/dishSchemas';
 import { useDispatch, useSelector } from 'react-redux';

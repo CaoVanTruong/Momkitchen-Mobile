@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
+  addFoodPackage,
   getFoodPackages,
   getFoodPackagesInSession,
 } from 'redux/actions/foodPackage';
@@ -36,6 +37,18 @@ const foodPackageSlice = createSlice({
       isLoading: false,
     }));
     builder.addCase(getFoodPackagesInSession.rejected, state => ({
+      ...state,
+      isLoading: false,
+    }));
+    builder.addCase(addFoodPackage.pending, state => ({
+      ...state,
+      isLoading: true,
+    }));
+    builder.addCase(addFoodPackage.fulfilled, state => ({
+      ...state,
+      isLoading: false,
+    }));
+    builder.addCase(addFoodPackage.rejected, state => ({
       ...state,
       isLoading: false,
     }));
