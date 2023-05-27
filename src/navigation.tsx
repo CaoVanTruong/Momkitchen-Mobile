@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { registrationConfig } from 'types/navigationConfig';
@@ -16,6 +16,7 @@ import {
   KitchenScreen,
   MarketDetailScreen,
   MarketScreen,
+  OrderDetailScreen,
   OrderScreen,
   ProfileScreen,
 } from 'screens/chef';
@@ -95,6 +96,7 @@ const ChefNavigator = () => (
     <ChefStack.Screen name="foodStyle" component={FoodStyleScreen} />
     <ChefStack.Screen name="marketDetail" component={MarketDetailScreen} />
     <ChefStack.Screen name="addFoodPackage" component={AddFoodPackageScreen} />
+    <ChefStack.Screen name="orderDetail" component={OrderDetailScreen} />
   </ChefStack.Navigator>
 );
 
@@ -117,9 +119,10 @@ const Navigation = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const dispatch = useDispatch<any>();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     dispatch(getCacheUserState());
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const renderApp = (() => {
     if (!user || !user.role) {

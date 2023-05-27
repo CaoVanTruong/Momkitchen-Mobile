@@ -1,6 +1,7 @@
 const Colors = {
   white: '#FFFFFF',
   black: '#000000',
+  black_80: '#000000B3',
   lightPink: '#E97373',
   pink: '#D72D5C',
   red: '#FF0000',
@@ -9,6 +10,7 @@ const Colors = {
   superDarkPink: '#2E0C19',
   gray: '#D9D9D9',
   gray_50: '#D9D9D988',
+  gray_25: '#D9D9D944',
   darkGreen: '#947E0A',
   lightGreen: '#D0DB8B',
   orange: '#FF7A00',

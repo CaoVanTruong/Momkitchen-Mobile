@@ -8,10 +8,12 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { IOrderItem } from 'types/order';
+import { IOrder } from 'types/order';
 
-interface OrderItemProps extends IOrderItem {
-  onConfirm: () => void;
+interface OrderItemProps extends IOrder {
+  disabled?: boolean;
+  onConfirm?: () => void;
+  onPress?: () => void;
 }
 
 const OrderItem = ({
@@ -19,15 +21,20 @@ const OrderItem = ({
   date,
   customer,
   orderDetails,
-  status,
+  deliveryStatus,
+  disabled,
   onConfirm,
+  onPress,
 }: OrderItemProps) => {
   const totalPrice = orderDetails.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + item.sessionPackage.price * item.quantity,
     0,
   );
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={styles.container}
+      disabled={disabled}>
       <View style={styles.contentWrapper}>
         <View style={styles.infoWrapper}>
           <Icon
@@ -58,9 +65,9 @@ const OrderItem = ({
         <TouchableOpacity onPress={onConfirm} style={styles.confirmBtn}>
           <Text style={styles.confirmTitle}>Confirm</Text>
         </TouchableOpacity>
-        <Text style={styles.status}>{status}</Text>
+        <Text style={styles.status}>{deliveryStatus}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

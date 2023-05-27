@@ -6,4 +6,5 @@ export type ChefStackParamList = {
   foodStyle: undefined;
   marketDetail: { sessionId: number };
   addFoodPackage: undefined;
+  orderDetail: { orderId: number };
 };

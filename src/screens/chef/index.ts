@@ -4,6 +4,7 @@ export { default as MarketScreen } from './Market';
 export { default as MarketDetailScreen } from './MarketDetail';
 export { default as ProfileScreen } from './Profile';
 export { default as OrderScreen } from './Order';
+export { default as OrderDetailScreen } from './OrderDetail';
 export { default as DishTypeScreen } from './DishType';
 export { default as DishesScreen } from './Dishes';
 export { default as FoodPackageScreen } from './FoodPackage';

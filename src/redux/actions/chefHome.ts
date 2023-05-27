@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { API_STATUS } from 'constants/api';
-import { IOrderItem } from 'types/order';
+import { IOrder } from 'types/order';
 import { IUserState } from 'types/user';
 import api from 'utils/api';
 
@@ -46,7 +46,7 @@ export const getNumOfOrders = createAsyncThunk<number>(
     }),
 );
 
-export const getRecentOrders = createAsyncThunk<IOrderItem[]>(
+export const getRecentOrders = createAsyncThunk<IOrder[]>(
   GET_RECENT_ORDERS,
   (_, { getState }) =>
     new Promise(async (resolve, reject) => {

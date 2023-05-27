@@ -1,21 +1,22 @@
-export type IOrderItem = {
-  id: string;
+import { IFoodPackageInSession } from './foodPackage';
+import { ISession } from './session';
+
+export type IOrder = {
+  id: number;
   date: string;
-  customer: ICustomer;
-  quantity: number;
   batchId: number | null;
-  time: string;
   status: string;
   deliveryStatus: string;
-  deliveryTime: string;
   note: string;
   building: IBuilding;
+  customer: ICustomer;
   orderDetails: IOrderDetail[];
+  session: ISession;
 };
 
 export type IOrderDetail = {
-  price: number;
   quantity: number;
+  sessionPackage: IFoodPackageInSession;
 };
 
 export type ICustomer = {
@@ -30,4 +31,9 @@ export type IBuilding = {
   id: number;
   name: string;
   address: string;
+};
+
+export type IOrderState = {
+  isLoading: boolean;
+  items: IOrder[];
 };

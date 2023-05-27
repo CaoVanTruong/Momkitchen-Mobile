@@ -6,7 +6,7 @@ export type IFoodPackage = {
   image: string | null;
   defaultPrice: number;
   description: string;
-  foodPackageStyle: IFoodStyle;
+  foodPackageStyle: IFoodStyle | null;
 };
 
 export type IFoodPackageState = {

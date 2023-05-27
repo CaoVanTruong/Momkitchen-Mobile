@@ -4,6 +4,7 @@ import foodPackageReducer from 'redux/slices/FoodPackage';
 import session from 'redux/slices/Session';
 import market from 'redux/slices/Market';
 import chefHome from 'redux/slices/ChefHome';
+import orderReducer from 'redux/slices/Order';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     session: session,
     market: market,
     chefHome: chefHome,
+    order: orderReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

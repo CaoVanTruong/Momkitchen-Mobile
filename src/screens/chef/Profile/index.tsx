@@ -10,9 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from 'redux/actions/user';
 import { RootState } from 'store';
 
-const SettingsScreen = () => {
+const ProfileScreen = () => {
   const dispatch = useDispatch<any>();
-  const user = useSelector((state: RootState) => state.user.user);
+  const { user, isLoading } = useSelector((state: RootState) => state.user);
 
   const onLogout = () => {
     dispatch(logout());
@@ -22,6 +22,7 @@ const SettingsScreen = () => {
     <ScreenContainer
       hasBack={false}
       title="Profile"
+      isLoading={isLoading}
       bodyContainerStyle={styles.container}>
       <View style={styles.imgPlaceholder}>
         <UserPlaceholder width={64} height={64} />
@@ -76,7 +77,7 @@ const SettingsScreen = () => {
   );
 };
 
-export default SettingsScreen;
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {

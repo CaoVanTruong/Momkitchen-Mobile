@@ -19,9 +19,11 @@ const REMOVE_FOOD_STYLES = 'removeFoodStyles';
 
 export const getDishTypes = createAsyncThunk<IDishType[]>(
   DISH_TYPES,
-  async (_, { rejectWithValue }) => {
+  async (_, { getState, rejectWithValue }) => {
     try {
-      const res = await api.get('DishTypes');
+      const { user } = getState() as { user: IUserState };
+
+      const res = await api.get(`DishTypes/${user.user?.id}`);
 
       if (res.status === API_STATUS.OK && res.data.isSuccess) {
         return res.data.message;

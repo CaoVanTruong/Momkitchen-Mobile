@@ -3,7 +3,7 @@ import { Bell, Cash, List } from 'assets/svgs';
 import React, { useEffect } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { OrderItem, ScreenContainer } from 'components';
-import { IOrderItem } from 'types/order';
+import { IOrder } from 'types/order';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import {
@@ -42,15 +42,15 @@ const DashboardScreen = () => {
 
   const onNotificationPress = () => {};
 
-  const onConfirm = (id: string) => {
+  const onConfirm = (id: number) => {
     if (!id) {
       return;
     }
     console.log('confirm order', id);
   };
 
-  const renderOrderItems = ({ item }: { item: IOrderItem }) => (
-    <OrderItem onConfirm={() => onConfirm(item.id)} {...item} />
+  const renderOrderItems = ({ item }: { item: IOrder }) => (
+    <OrderItem onConfirm={() => onConfirm(item.id)} disabled {...item} />
   );
 
   return (
@@ -105,7 +105,7 @@ const DashboardScreen = () => {
           {orders.length ? (
             <FlatList
               data={orders}
-              keyExtractor={item => item.id}
+              keyExtractor={item => item.id.toString()}
               renderItem={renderOrderItems}
               style={[styles.listWrapper, styles.ph_24]}
             />

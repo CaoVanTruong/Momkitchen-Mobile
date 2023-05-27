@@ -13,16 +13,29 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(login.pending, state => ({ ...state, isLoading: true }));
+    builder.addCase(getCacheUserState.pending, state => ({
+      ...state,
+      isLoading: true,
+    }));
+    builder.addCase(logout.pending, state => ({ ...state, isLoading: true }));
+
     builder.addCase(login.fulfilled, (_, { payload }) => {
       return { isLoading: false, user: payload };
     });
     builder.addCase(login.rejected, state => ({ ...state, isLoading: false }));
+    builder.addCase(getCacheUserState.rejected, state => ({
+      ...state,
+      isLoading: false,
+    }));
+
+    builder.addCase(logout.rejected, state => ({ ...state, isLoading: false }));
 
     builder.addCase(getCacheUserState.fulfilled, (state, { payload }) => {
       if (payload) {
-        return { ...state, user: payload };
+        return { ...state, user: payload, isLoading: false };
       }
     });
+
     builder.addCase(logout.fulfilled, () => {
       return initialValue;
     });
