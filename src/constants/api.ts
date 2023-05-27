@@ -6,10 +6,11 @@ export const API_STATUS = {
 };
 
 export const firebaseConfig = {
-  apiKey: 'AIzaSyA1EdzGPF2g_JYKQGL9prPZ-0FlDqBUPv8',
-  authDomain: 'image-storage-275d8.firebaseapp.com',
-  projectId: 'image-storage-275d8',
-  storageBucket: 'image-storage-275d8.appspot.com',
-  messagingSenderId: '1038619865927',
-  appId: '1:1038619865927:web:39864cae7127ea4431d262',
+  apiKey: 'AIzaSyBdFetq22_GBcFuwuPpmHVlcAb0TA5k2_g',
+  authDomain: 'mom-kitchen-e100b.firebaseapp.com',
+  projectId: 'mom-kitchen-e100b',
+  storageBucket: 'mom-kitchen-e100b.appspot.com',
+  messagingSenderId: '852387950617',
+  appId: '1:852387950617:web:803d426d2c6c846bd5fa88',
+  measurementId: 'G-YDDNYWEKPB',
 };
