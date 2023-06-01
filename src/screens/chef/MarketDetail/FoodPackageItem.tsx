@@ -7,6 +7,7 @@ import shadowStyle from 'constants/shadowStyle';
 import dayjs from 'dayjs';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FoodPackageInSessionStatus } from 'types/foodPackage';
 
 interface FoodPackageItemProps {
   name: string;
@@ -17,6 +18,7 @@ interface FoodPackageItemProps {
   remainQuantity: number;
   createDate: string;
   onPress?: () => void;
+  status: number;
 }
 
 const FoodPackageItem = ({
@@ -28,6 +30,7 @@ const FoodPackageItem = ({
   remainQuantity,
   createDate,
   onPress,
+  status,
 }: FoodPackageItemProps) => {
   return (
     <View style={styles.container}>
@@ -43,15 +46,19 @@ const FoodPackageItem = ({
           <View style={styles.info}>
             <Text style={styles.name}>{name || 'No title'}</Text>
             {!!description && <Text style={styles.desc}>{description}</Text>}
-            {/* <Text style={styles.desc}>{description}</Text> */}
             <View style={styles.priceWrapper}>
               <Text style={styles.desc}>{`Price: ${price} VND`}</Text>
               <Text style={styles.desc}>{`Quantity: ${quantity}`}</Text>
               <Text style={styles.desc}>{`Remain: ${remainQuantity}`}</Text>
             </View>
-            <Text style={styles.desc}>{`Created: ${dayjs(createDate).format(
-              DEFAULT_DATE_FORMAT,
-            )}`}</Text>
+            <View style={styles.priceWrapper}>
+              <Text style={styles.desc}>{`Created: ${dayjs(createDate).format(
+                DEFAULT_DATE_FORMAT,
+              )}`}</Text>
+              <Text style={[styles.desc, styles.status]}>
+                {FoodPackageInSessionStatus[status].toUpperCase()}
+              </Text>
+            </View>
           </View>
         </View>
       </TouchableOpacity>
@@ -102,5 +109,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexWrap: 'wrap',
     marginBottom: 4,
+  },
+  status: {
+    fontWeight: 'bold',
+    color: Colors.red,
   },
 });

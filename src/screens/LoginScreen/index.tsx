@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from '@rneui/themed';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, ToastAndroid, View } from 'react-native';
 import Colors from 'constants/colors';
 import { Logo } from 'assets/svgs';
 import { LoginFormType } from 'schemas/loginSchema';
@@ -17,7 +17,11 @@ const LoginScreen = () => {
   const isLoading = useSelector((state: RootState) => state.user.isLoading);
 
   const onSubmit = (value: LoginFormType) => {
-    dispatch(login({ email: value.email, password: value.password }));
+    dispatch(login({ email: value.email, password: value.password }))
+      .unwrap()
+      .catch((err: any) => {
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
+      });
   };
 
   return (

@@ -42,13 +42,13 @@ export const login = createAsyncThunk<IUser, LoginFormType>(
             const data: IUser = {
               ...resBody.shippers[0],
               token,
-              role: 'Driver',
+              role: 'Shipper',
             };
             AsyncStorage.setItem('loginData', JSON.stringify(data));
             resolve(data);
           }
         } else {
-          reject('Error orcurred');
+          reject(res.data.message || 'Error orcurred');
         }
       } catch (error) {
         reject(error);

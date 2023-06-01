@@ -17,8 +17,8 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
   const { control, handleSubmit } = useForm<LoginFormType>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
-      email: 'chef-long@gmail.com',
-      password: 'stringAAA@123',
+      email: 'shipper26@gmail.com',
+      password: 'shipper28',
     },
   });
 

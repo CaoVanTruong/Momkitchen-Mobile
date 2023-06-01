@@ -53,7 +53,7 @@ const AddDishForm = ({
           fieldState: { error },
         }) => (
           <Input
-            placeholder="Dish Type Name"
+            placeholder="Dish Name"
             label="Name"
             value={value}
             onChangeText={onChange}

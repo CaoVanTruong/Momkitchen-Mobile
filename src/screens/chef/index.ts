@@ -10,3 +10,4 @@ export { default as DishesScreen } from './Dishes';
 export { default as FoodPackageScreen } from './FoodPackage';
 export { default as FoodStyleScreen } from './FoodStyle';
 export { default as AddFoodPackageScreen } from './AddFoodPackage';
+export { default as FoodPackageDetailScreen } from './FoodPackageDetail';

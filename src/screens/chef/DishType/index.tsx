@@ -1,6 +1,11 @@
 import { ScreenContainer } from 'components';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  ToastAndroid,
+  TouchableOpacity,
+} from 'react-native';
 import DishTypeItem from './DishTypeItem';
 import { IDishType } from 'types/dish';
 import { PlusRounded } from 'assets/svgs';
@@ -48,7 +53,12 @@ const DishTypeScreen = () => {
   };
 
   const onRemoveTypeItem = (id: number) => {
-    dispatch(removeDishTypes(id)).unwrap().then(fetchDishTypes);
+    dispatch(removeDishTypes(id))
+      .unwrap()
+      .then(fetchDishTypes)
+      .catch((err: any) => {
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
+      });
   };
 
   const handleSubmit = (value: AddDishTypeFormType) => {

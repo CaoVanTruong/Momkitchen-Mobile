@@ -1,3 +1,4 @@
+import { AddFoodPackageFormType } from 'schemas/foodPackageSchemas';
 import { IFoodStyle } from './foodStyle';
 
 export type IFoodPackage = {
@@ -7,11 +8,29 @@ export type IFoodPackage = {
   defaultPrice: number;
   description: string;
   foodPackageStyle: IFoodStyle | null;
+  foodPackageStyleId: number;
+  dishFoodPackages: IDishFoodPackage[];
+  sessionPackages: ISessionPackage[];
+};
+
+export type ISessionPackage = {
+  id: number;
+  sessionId: number;
 };
 
 export type IFoodPackageState = {
   isLoading: boolean;
   items: IFoodPackage[];
+};
+
+export type IDishFoodPackage = {
+  dishId: number;
+  quantity: number;
+};
+
+export type IUpdateFoodPackage = {
+  foodPackage: AddFoodPackageFormType;
+  foodPackageId: number;
 };
 
 export type IFoodPackageInSession = {
@@ -21,6 +40,7 @@ export type IFoodPackageInSession = {
   remainQuantity: number;
   createDate: string;
   foodPackage: IFoodPackage;
+  status: number;
 };
 
 export type IAddFoodPackageToSessionRequest = {
@@ -29,3 +49,10 @@ export type IAddFoodPackageToSessionRequest = {
   price: number;
   quantity: number;
 };
+
+export enum FoodPackageInSessionStatus {
+  New,
+  Approved,
+  Rejected,
+  Cancelled,
+}

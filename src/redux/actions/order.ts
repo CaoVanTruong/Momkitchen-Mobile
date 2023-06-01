@@ -1,11 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { API_STATUS } from 'constants/api';
 import { IOrder } from 'types/order';
+import { IChef, IShipperOrder } from 'types/shipperHome';
 import { IUserState } from 'types/user';
 import api from 'utils/api';
 
 const GET_ORDER = 'getOrder';
+const GET_SHIPPER_ORDER = 'getShipperOrder';
 const CHANGE_STATUS = 'changeStatus';
+const CANCEL_ORDER = 'cancelOrder';
 
 export const getOrders = createAsyncThunk<IOrder[]>(
   GET_ORDER,
@@ -17,13 +20,7 @@ export const getOrders = createAsyncThunk<IOrder[]>(
         const res = await api.get(`orders/chef/${user.user?.id}`);
 
         if (res.status === API_STATUS.OK && res.data.isSuccess) {
-          const resList = res.data.message as any[];
-
-          if (resList.length > 0) {
-            resolve(resList.map(item => item.order));
-          } else {
-            resolve([]);
-          }
+          resolve(res.data.message);
         } else {
           reject(res.data.message || 'Error orcurred');
         }
@@ -42,6 +39,55 @@ export const changeOrderStatus = createAsyncThunk<string, number>(
 
         if (res.status === API_STATUS.OK && res.data.isSuccess) {
           resolve(res.data.message);
+        } else {
+          reject(res.data.message || 'Error orcurred');
+        }
+      } catch (error: any) {
+        reject(error.message);
+      }
+    }),
+);
+
+export const cancelOrder = createAsyncThunk<string, number>(
+  CANCEL_ORDER,
+  orderId =>
+    new Promise(async (resolve, reject) => {
+      try {
+        const res = await api.put(`orders/${orderId}/cancel`);
+
+        if (res.status === API_STATUS.OK && res.data.isSuccess) {
+          resolve(res.data.message);
+        } else {
+          reject(res.data.message || 'Error orcurred');
+        }
+      } catch (error: any) {
+        reject(error.message);
+      }
+    }),
+);
+
+export const getShipperOrders = createAsyncThunk<IShipperOrder[]>(
+  GET_SHIPPER_ORDER,
+  (_, { getState }) =>
+    new Promise(async (resolve, reject) => {
+      try {
+        const { user } = getState() as { user: IUserState };
+
+        const res = await api.get(`orders/shipper/${user.user?.id}`);
+
+        if (res.status === API_STATUS.OK && res.data.isSuccess) {
+          const listOrders = res.data.message;
+          const chefData: IChef = {
+            id: listOrders.chefID,
+            name: listOrders.chefName,
+            phone: listOrders.chefPhone,
+            address: listOrders.chefAddress,
+          };
+          const returnData = listOrders.map((item: any) => ({
+            ...item.order,
+            chef: chefData,
+          }));
+          resolve(returnData as IShipperOrder[]);
         } else {
           reject(res.data.message || 'Error orcurred');
         }

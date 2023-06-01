@@ -13,10 +13,16 @@ import {
 } from 'redux/actions/chefHome';
 import Colors from 'constants/colors';
 import Dimension from 'constants/dimension';
+import { changeOrderStatus } from 'redux/actions/order';
+import { getChangeStatusButtonLabel } from 'utils/orderStatus';
 
 const DashboardScreen = () => {
   const { isLoading, revenue, orders, numberOfOrders } = useSelector(
     (state: RootState) => state.chefHome,
+  );
+
+  const isOrderLoading = useSelector(
+    (state: RootState) => state.order.isLoading,
   );
 
   const dispatch = useDispatch<any>();
@@ -33,6 +39,10 @@ const DashboardScreen = () => {
     dispatch(getRecentOrders());
   };
 
+  const changeStatus = (id: number) => {
+    dispatch(changeOrderStatus(id)).unwrap().then(fetchRecentOrders);
+  };
+
   useEffect(() => {
     fetchRecentOrders();
     fetchRevenue();
@@ -46,17 +56,26 @@ const DashboardScreen = () => {
     if (!id) {
       return;
     }
-    console.log('confirm order', id);
+
+    changeStatus(id);
   };
 
-  const renderOrderItems = ({ item }: { item: IOrder }) => (
-    <OrderItem onConfirm={() => onConfirm(item.id)} disabled {...item} />
-  );
+  const renderOrderItems = ({ item }: { item: IOrder }) => {
+    const btnLabel = getChangeStatusButtonLabel(item.deliveryStatus);
+    return (
+      <OrderItem
+        confirmBtnLabel={btnLabel}
+        onConfirm={() => onConfirm(item.id)}
+        disabled
+        {...item}
+      />
+    );
+  };
 
   return (
     <ScreenContainer
       hasGradientBg
-      isLoading={isLoading}
+      isLoading={isLoading || isOrderLoading}
       title="Home"
       hasBack={false}
       bodyContainerStyle={styles.container}
@@ -105,7 +124,7 @@ const DashboardScreen = () => {
           {orders.length ? (
             <FlatList
               data={orders}
-              keyExtractor={item => item.id.toString()}
+              keyExtractor={item => item?.id.toString()}
               renderItem={renderOrderItems}
               style={[styles.listWrapper, styles.ph_24]}
             />

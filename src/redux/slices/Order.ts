@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { changeOrderStatus, getOrders } from 'redux/actions/order';
+import { cancelOrder, changeOrderStatus, getOrders } from 'redux/actions/order';
 import { IOrderState } from 'types/order';
 
 const initialState: IOrderState = {
@@ -20,6 +20,10 @@ const orderSlice = createSlice({
       ...state,
       isLoading: true,
     }));
+    builder.addCase(cancelOrder.pending, state => ({
+      ...state,
+      isLoading: true,
+    }));
     builder.addCase(getOrders.fulfilled, (_, { payload }) => ({
       isLoading: false,
       items: payload,
@@ -28,11 +32,19 @@ const orderSlice = createSlice({
       ...state,
       isLoading: false,
     }));
+    builder.addCase(cancelOrder.fulfilled, state => ({
+      ...state,
+      isLoading: false,
+    }));
     builder.addCase(getOrders.rejected, state => ({
       ...state,
       isLoading: false,
     }));
     builder.addCase(changeOrderStatus.rejected, state => ({
+      ...state,
+      isLoading: false,
+    }));
+    builder.addCase(cancelOrder.rejected, state => ({
       ...state,
       isLoading: false,
     }));

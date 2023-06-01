@@ -11,6 +11,7 @@ import {
   DashboardScreen as ChefDashboardScreen,
   DishesScreen,
   DishTypeScreen,
+  FoodPackageDetailScreen,
   FoodPackageScreen,
   FoodStyleScreen,
   KitchenScreen,
@@ -18,9 +19,16 @@ import {
   MarketScreen,
   OrderDetailScreen,
   OrderScreen,
-  ProfileScreen,
+  ProfileScreen as ChefProfileScreen,
 } from 'screens/chef';
-import { Home, Kitchen, List, Market, User } from 'assets/svgs';
+import {
+  DashboardScreen as DriverDashboardScreen,
+  HistoryScreen,
+  ShipperOrderDetailScreen,
+  ShipperOrderScreen,
+  ProfileScreen as ShipperProfileScreen,
+} from 'screens/driver';
+import { Clock, Home, Kitchen, List, Market, User } from 'assets/svgs';
 
 import { getCacheUserState } from 'redux/actions/user';
 import { ChefStackParamList } from 'types/navigation';
@@ -28,7 +36,11 @@ import Colors from 'constants/colors';
 
 const ChefTab = createBottomTabNavigator();
 const ChefStack = createStackNavigator<ChefStackParamList>();
+
 const LoginStack = createStackNavigator();
+
+const ShipperTab = createBottomTabNavigator();
+const ShipperStack = createStackNavigator();
 
 const ChefTabNavigator = () => (
   <ChefTab.Navigator
@@ -77,7 +89,7 @@ const ChefTabNavigator = () => (
     />
     <ChefTab.Screen
       name={'Profile'}
-      component={ProfileScreen}
+      component={ChefProfileScreen}
       options={{
         tabBarIcon: ({ color }: { color: string }) => (
           <User width={28} height={28} fill={color} />
@@ -97,7 +109,72 @@ const ChefNavigator = () => (
     <ChefStack.Screen name="marketDetail" component={MarketDetailScreen} />
     <ChefStack.Screen name="addFoodPackage" component={AddFoodPackageScreen} />
     <ChefStack.Screen name="orderDetail" component={OrderDetailScreen} />
+    <ChefStack.Screen
+      name="foodPackageDetail"
+      component={FoodPackageDetailScreen}
+    />
   </ChefStack.Navigator>
+);
+
+const ShipperTabNavigator = () => (
+  <ShipperTab.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarActiveTintColor: Colors.orange,
+      tabBarStyle: {
+        paddingVertical: 8,
+      },
+    }}>
+    <ShipperTab.Screen
+      name="Home"
+      component={DriverDashboardScreen}
+      options={{
+        tabBarIcon: ({ color }: { color: string }) => (
+          <Home width={28} height={28} fill={color} />
+        ),
+      }}
+    />
+    <ShipperTab.Screen
+      name={'Order'}
+      component={ShipperOrderScreen}
+      options={{
+        tabBarIcon: ({ color }: { color: string }) => (
+          <List width={28} height={28} fill={color} />
+        ),
+      }}
+    />
+    <ShipperTab.Screen
+      name={'History'}
+      component={HistoryScreen}
+      options={{
+        tabBarIcon: ({ color }: { color: string }) => (
+          <Clock width={28} height={28} fill={color} />
+        ),
+      }}
+    />
+    <ShipperTab.Screen
+      name={'Profile'}
+      component={ShipperProfileScreen}
+      options={{
+        tabBarIcon: ({ color }: { color: string }) => (
+          <User width={28} height={28} fill={color} />
+        ),
+      }}
+    />
+  </ShipperTab.Navigator>
+);
+
+const ShipperStackNavigator = () => (
+  <ShipperStack.Navigator screenOptions={{ headerShown: false }}>
+    <ShipperStack.Screen
+      name="shipperHomeTab"
+      component={ShipperTabNavigator}
+    />
+    <ShipperStack.Screen
+      name="orderDetail"
+      component={ShipperOrderDetailScreen}
+    />
+  </ShipperStack.Navigator>
 );
 
 const LoginNavigator = () => (
@@ -131,6 +208,10 @@ const Navigation = () => {
 
     if (user.role === 'Chef') {
       return <ChefNavigator />;
+    }
+
+    if (user.role === 'Shipper') {
+      return <ShipperStackNavigator />;
     }
 
     return <LoginNavigator />;

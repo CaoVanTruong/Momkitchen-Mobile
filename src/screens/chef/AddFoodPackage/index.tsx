@@ -1,11 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Input, Text } from '@rneui/themed';
 import { ChevronDown, ChevronUp } from 'assets/svgs';
-import { ScreenContainer, UploadImage } from 'components';
+import { ScreenContainer } from 'components';
 import Colors from 'constants/colors';
 import React, { useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, ToastAndroid, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDishes, getFoodStyles } from 'redux/actions/market';
@@ -15,21 +15,35 @@ import { RootState } from 'store';
 import { IFoodStyle } from 'types/foodStyle';
 import AddListFood from './AddListFood';
 import { ScrollView } from 'react-native-gesture-handler';
-import { addFoodPackage, getFoodPackages } from 'redux/actions/foodPackage';
-import { useNavigation } from '@react-navigation/native';
+import {
+  addFoodPackage,
+  getFoodPackages,
+  updateFoodPackage,
+} from 'redux/actions/foodPackage';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Dimension from 'constants/dimension';
+import { IFoodPackage } from 'types/foodPackage';
+import UploadImage from './UploadImage';
 
 const AddFoodPackageScreen = () => {
   const dispatch = useDispatch<any>();
   const navigation = useNavigation();
+  const router = useRoute();
 
   const { foodStyles, dishes, isLoading } = useSelector(
     (state: RootState) => state.market,
   );
 
-  const { isLoading: isSubmitLoading } = useSelector(
+  const { isLoading: isSubmitLoading, items: foodPackagesList } = useSelector(
     (state: RootState) => state.foodPackage,
   );
+
+  const routerParams = router.params as any;
+  const foodPackageId = routerParams?.foodPackageId as number | undefined;
+
+  const curFoodPackage = foodPackagesList.find(fp => fp.id === foodPackageId);
+  const isUpdateDisabled =
+    curFoodPackage && !!curFoodPackage.sessionPackages[0]?.sessionId;
 
   const fetchFoodStyles = () => {
     dispatch(getFoodStyles());
@@ -45,30 +59,78 @@ const AddFoodPackageScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const getFoodPackageDishes = (fp: IFoodPackage) => {
+    if (!fp || !fp.dishFoodPackages || !fp.dishFoodPackages.length) {
+      return [];
+    }
+
+    const curDishes = fp.dishFoodPackages;
+    const dishesState = curDishes.map(dish => {
+      const dishName = dishes.find(d => dish.dishId === d.id)?.name;
+      return {
+        ...dish,
+        title: dishName,
+      };
+    });
+    return dishesState;
+  };
+
   const { control, handleSubmit } = useForm<AddFoodPackageFormType>({
     resolver: yupResolver(foodPackageSchemas.addFoodPackageSchema),
-    defaultValues: {
-      name: '',
-      description: '',
-      defaultPrice: 0,
-      dishes: [],
-    },
+    defaultValues: curFoodPackage
+      ? {
+          name: curFoodPackage.name,
+          defaultPrice: curFoodPackage.defaultPrice,
+          description: curFoodPackage.description,
+          foodPackageStyleId: curFoodPackage.foodPackageStyle?.id,
+          image: curFoodPackage.image
+            ? { fileName: undefined, uri: curFoodPackage.image }
+            : undefined,
+          dishes: getFoodPackageDishes(curFoodPackage),
+        }
+      : {
+          name: '',
+          description: '',
+          defaultPrice: 0,
+          dishes: [],
+        },
   });
 
   const dropdownRef = useRef<SelectDropdown>(null);
 
   const onSubmit = (values: AddFoodPackageFormType) => {
+    if (curFoodPackage) {
+      dispatch(
+        updateFoodPackage({
+          foodPackageId: curFoodPackage.id,
+          foodPackage: values,
+        }),
+      )
+        .unwrap()
+        .then(() => {
+          navigation.goBack();
+          dispatch(getFoodPackages());
+        })
+        .catch((err: any) => {
+          ToastAndroid.show(err.message, ToastAndroid.SHORT);
+        });
+      return;
+    }
+
     dispatch(addFoodPackage(values))
       .unwrap()
       .then(() => {
         navigation.goBack();
         dispatch(getFoodPackages());
+      })
+      .catch((err: any) => {
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
       });
   };
 
   return (
     <ScreenContainer
-      title="Add Food Package"
+      title={foodPackageId ? 'Edit Food Package' : 'Add Food Package'}
       isLoading={isLoading || isSubmitLoading}
       bodyContainerStyle={styles.container}>
       <ScrollView style={styles.scrollContainer}>
@@ -89,6 +151,7 @@ const AddFoodPackageScreen = () => {
               errorStyle={styles.error}
               inputStyle={styles.input}
               labelStyle={styles.label}
+              disabled={isUpdateDisabled}
             />
           )}
         />
@@ -109,6 +172,7 @@ const AddFoodPackageScreen = () => {
               errorStyle={styles.error}
               inputStyle={styles.input}
               labelStyle={styles.label}
+              disabled={isUpdateDisabled}
             />
           )}
         />
@@ -130,6 +194,7 @@ const AddFoodPackageScreen = () => {
               inputStyle={styles.input}
               labelStyle={styles.label}
               rightIcon={<Text>VND</Text>}
+              disabled={isUpdateDisabled}
             />
           )}
         />
@@ -139,43 +204,56 @@ const AddFoodPackageScreen = () => {
           render={({ field: { onChange, value } }) => (
             <View>
               <Text style={styles.dropdownLabel}>Food Style</Text>
-              <SelectDropdown
-                data={foodStyles}
-                ref={dropdownRef}
-                onSelect={(item: IFoodStyle) => {
-                  onChange(item.id);
-                }}
-                defaultValue={value}
-                buttonTextAfterSelection={(selectedItem: IFoodStyle) => {
-                  return selectedItem.title;
-                }}
-                rowTextForSelection={(item: IFoodStyle) => item.title}
-                defaultButtonText="Select Food Type"
-                buttonStyle={styles.dropdownBtnStyle}
-                buttonTextStyle={styles.dropdownBtnTxtStyle}
-                renderDropdownIcon={(isOpened: boolean) => {
-                  return isOpened ? (
-                    <ChevronUp width={18} height={18} fill={Colors.black} />
-                  ) : (
-                    <ChevronDown width={18} height={18} fill={Colors.black} />
-                  );
-                }}
-                dropdownIconPosition="right"
-                rowStyle={styles.dropdownDropdownStyle}
-                rowTextStyle={styles.dropdownRowTxtStyle}
-              />
+              {isUpdateDisabled ? (
+                <Text style={styles.valueText}>
+                  {curFoodPackage.foodPackageStyle?.title}
+                </Text>
+              ) : (
+                <SelectDropdown
+                  data={foodStyles}
+                  ref={dropdownRef}
+                  onSelect={(item: IFoodStyle) => {
+                    onChange(item.id);
+                  }}
+                  defaultValue={value}
+                  buttonTextAfterSelection={(selectedItem: IFoodStyle) => {
+                    return selectedItem.title;
+                  }}
+                  rowTextForSelection={(item: IFoodStyle) => item.title}
+                  defaultButtonText="Select Food Type"
+                  buttonStyle={styles.dropdownBtnStyle}
+                  buttonTextStyle={styles.dropdownBtnTxtStyle}
+                  renderDropdownIcon={(isOpened: boolean) => {
+                    return isOpened ? (
+                      <ChevronUp width={18} height={18} fill={Colors.black} />
+                    ) : (
+                      <ChevronDown width={18} height={18} fill={Colors.black} />
+                    );
+                  }}
+                  dropdownIconPosition="right"
+                  rowStyle={styles.dropdownDropdownStyle}
+                  rowTextStyle={styles.dropdownRowTxtStyle}
+                />
+              )}
             </View>
           )}
         />
-        <UploadImage control={control} />
-        <AddListFood control={control} dishesList={dishes} />
+        <UploadImage control={control} disabled={isUpdateDisabled} />
+        <AddListFood
+          control={control}
+          dishesList={dishes}
+          disabled={isUpdateDisabled}
+        />
       </ScrollView>
-      <Button
-        title={'Save'}
-        buttonStyle={styles.submitBtn}
-        titleStyle={styles.buttonTitle}
-        onPress={handleSubmit(onSubmit)}
-      />
+      {!isUpdateDisabled && (
+        <Button
+          title={'Save'}
+          buttonStyle={styles.submitBtn}
+          titleStyle={styles.buttonTitle}
+          onPress={handleSubmit(onSubmit)}
+          disabled={curFoodPackage && curFoodPackage.sessionPackages.length > 0}
+        />
+      )}
     </ScreenContainer>
   );
 };
@@ -186,12 +264,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    paddingBottom: 16,
+    paddingVertical: 16,
   },
   scrollContainer: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingVertical: 16,
   },
   input: {
     paddingHorizontal: 8,
@@ -247,5 +324,9 @@ const styles = StyleSheet.create({
     color: Colors.black,
     textAlign: 'left',
     fontSize: 14,
+  },
+  valueText: {
+    marginLeft: 12,
+    fontWeight: 'bold',
   },
 });

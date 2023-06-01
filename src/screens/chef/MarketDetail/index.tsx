@@ -56,13 +56,14 @@ const MarketDetail = () => {
   const renderItem = ({ item }: { item: IFoodPackageInSession }) => {
     return (
       <FoodPackageItem
-        name={item.foodPackage.name}
+        name={item.foodPackage?.name}
         createDate={item.createDate}
-        description={item.foodPackage.description}
-        image={item.foodPackage.image}
+        description={item.foodPackage?.description}
+        image={item.foodPackage?.image}
         price={item.price}
         quantity={item.quantity}
         remainQuantity={item.remainQuantity}
+        status={item.status}
       />
     );
   };

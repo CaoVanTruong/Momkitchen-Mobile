@@ -123,7 +123,7 @@ export const addDish = createAsyncThunk<IDish, AddDishFormType>(
         const res = await api.post('dishes', { ...params, image: imgUrl });
 
         if (res.status === API_STATUS.OK && res.data.isSuccess) {
-          resolve(res.data.message);
+          resolve({ ...res.data.message, image: imgUrl });
         } else {
           reject(res.data.message || 'Error orcurred');
         }

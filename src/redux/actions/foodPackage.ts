@@ -6,6 +6,7 @@ import {
   IAddFoodPackageToSessionRequest,
   IFoodPackage,
   IFoodPackageInSession,
+  IUpdateFoodPackage,
 } from 'types/foodPackage';
 import { IUserState } from 'types/user';
 import api from 'utils/api';
@@ -13,6 +14,7 @@ import { storage } from 'utils/firebase';
 
 const FOOD_PACKAGES = 'foodPackages';
 const ADD_FOOD_PACKAGES = 'addFoodPackages';
+const UPDATE_FOOD_PACKAGES = 'updateFoodPackages';
 const FOOD_PACKAGES_IN_SESSION = 'foodPackagesInSessions';
 const ADD_FOOD_PACKAGES_IN_SESSION = 'addFoodPackagesInSessions';
 
@@ -68,6 +70,59 @@ export const addFoodPackage = createAsyncThunk<number, AddFoodPackageFormType>(
         };
 
         const res = await api.post('foodpackages', params);
+
+        if (res.status === API_STATUS.OK && res.data.isSuccess) {
+          resolve(res.data.message);
+        } else {
+          reject(res.data.message);
+        }
+      } catch (error: any) {
+        reject(error.message);
+      }
+    }),
+);
+
+export const updateFoodPackage = createAsyncThunk<number, IUpdateFoodPackage>(
+  UPDATE_FOOD_PACKAGES,
+  (pkgData, { getState }) =>
+    new Promise(async (resolve, reject) => {
+      try {
+        const { user } = getState() as { user: IUserState };
+        let imgUrl = pkgData.foodPackage.image.uri;
+        if (
+          pkgData.foodPackage.image &&
+          pkgData.foodPackage.image.fileName &&
+          pkgData.foodPackage.image.uri
+        ) {
+          const imageRef = ref(
+            storage,
+            `image/${pkgData.foodPackage.image.fileName}`,
+          );
+          const img = await fetch(pkgData.foodPackage.image.uri);
+          const bytes = await img.blob();
+          await uploadBytes(imageRef, bytes);
+          imgUrl = await getDownloadURL(imageRef);
+        }
+
+        const params = {
+          foodPackageRequest: {
+            name: pkgData.foodPackage.name,
+            image: imgUrl,
+            defaultPrice: pkgData.foodPackage.defaultPrice,
+            chefId: user.user?.id,
+            description: pkgData.foodPackage.description,
+            foodPackageStyleId: pkgData.foodPackage.foodPackageStyleId,
+          },
+          dishFoodPackageRequests: pkgData.foodPackage.dishes?.map(item => ({
+            dishId: item.dishId,
+            quantity: item.quantity,
+          })),
+        };
+
+        const res = await api.put(
+          `foodPackages/${pkgData.foodPackageId}`,
+          params,
+        );
 
         if (res.status === API_STATUS.OK && res.data.isSuccess) {
           resolve(res.data.message);

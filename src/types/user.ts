@@ -8,7 +8,7 @@ export type IUser = {
   name: string;
   email: string;
   password: string;
-  role?: 'Chef' | 'Driver';
+  role?: 'Chef' | 'Shipper';
   phone: string;
   address: string;
   token: string;

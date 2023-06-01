@@ -33,6 +33,8 @@ export const userSlice = createSlice({
     builder.addCase(getCacheUserState.fulfilled, (state, { payload }) => {
       if (payload) {
         return { ...state, user: payload, isLoading: false };
+      } else {
+        return { ...state, isLoading: false };
       }
     });
 

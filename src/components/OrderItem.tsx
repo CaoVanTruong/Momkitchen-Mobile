@@ -8,12 +8,18 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { IOrder } from 'types/order';
+import { ICustomer, IOrderDetail } from 'types/order';
 
-interface OrderItemProps extends IOrder {
+interface OrderItemProps {
   disabled?: boolean;
+  confirmBtnLabel?: string;
   onConfirm?: () => void;
   onPress?: () => void;
+  id: number;
+  date: string;
+  customer: ICustomer;
+  orderDetails: IOrderDetail[];
+  deliveryStatus: string;
 }
 
 const OrderItem = ({
@@ -23,13 +29,16 @@ const OrderItem = ({
   orderDetails,
   deliveryStatus,
   disabled,
+  confirmBtnLabel,
   onConfirm,
   onPress,
 }: OrderItemProps) => {
-  const totalPrice = orderDetails.reduce(
-    (total, item) => total + item.sessionPackage.price * item.quantity,
-    0,
-  );
+  const totalPrice =
+    orderDetails?.reduce(
+      (total, item) => total + item.sessionPackage.price * item.quantity,
+      0,
+    ) || 0;
+
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -45,10 +54,10 @@ const OrderItem = ({
           />
           <Text style={styles.id}>{id}</Text>
         </View>
-        <Text style={styles.name}>{`Order of ${customer.name}`}</Text>
+        <Text style={styles.name}>{`Order of ${customer?.name}`}</Text>
         <View style={styles.infoWrapper}>
           <Phone width={24} height={24} style={styles.infoIcon} />
-          <Text style={styles.phone}>{customer.phone}</Text>
+          <Text style={styles.phone}>{customer?.phone}</Text>
         </View>
         <View style={styles.infoWrapper}>
           <Coin width={24} height={24} style={styles.infoIcon} />
@@ -62,9 +71,13 @@ const OrderItem = ({
         </View>
       </View>
       <View style={styles.statusWrapper}>
-        <TouchableOpacity onPress={onConfirm} style={styles.confirmBtn}>
-          <Text style={styles.confirmTitle}>Confirm</Text>
-        </TouchableOpacity>
+        {confirmBtnLabel ? (
+          <TouchableOpacity onPress={onConfirm} style={styles.confirmBtn}>
+            <Text style={styles.confirmTitle}>{confirmBtnLabel}</Text>
+          </TouchableOpacity>
+        ) : (
+          <View />
+        )}
         <Text style={styles.status}>{deliveryStatus}</Text>
       </View>
     </TouchableOpacity>

@@ -55,8 +55,7 @@ export const getRecentOrders = createAsyncThunk<IOrder[]>(
         const res = await api.get(`orders/chef/${user.user?.id}/recent-order`);
 
         if (res.status === API_STATUS.OK && res.data.isSuccess) {
-          const listOrders = res.data.message;
-          resolve(listOrders.map((item: any) => item.order));
+          resolve(res.data.message);
         } else {
           reject(res.data.message);
         }

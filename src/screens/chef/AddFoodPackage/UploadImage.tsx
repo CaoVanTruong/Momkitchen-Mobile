@@ -10,9 +10,10 @@ import _pick from 'lodash/pick';
 
 interface UploadImageProps {
   control: Control<AddFoodPackageFormType>;
+  disabled?: boolean;
 }
 
-const UploadImage = ({ control }: UploadImageProps) => {
+const UploadImage = ({ control, disabled = false }: UploadImageProps) => {
   const {
     field: { value, onChange },
   } = useController({ control, name: 'image' });
@@ -38,12 +39,14 @@ const UploadImage = ({ control }: UploadImageProps) => {
   return (
     <View style={styles.imageUpload}>
       <Text style={styles.imageUploadTitle}>Image</Text>
-      <Button
-        buttonStyle={styles.uploadBtn}
-        title={'Upload Image'}
-        titleStyle={styles.uploadBtnLabel}
-        onPress={handleUploadImage}
-      />
+      {!disabled && (
+        <Button
+          buttonStyle={styles.uploadBtn}
+          title={'Upload Image'}
+          titleStyle={styles.uploadBtnLabel}
+          onPress={handleUploadImage}
+        />
+      )}
       {!!value && !!value.uri && (
         <Image source={{ uri: value.uri }} style={styles.previewImage} />
       )}

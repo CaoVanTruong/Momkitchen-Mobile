@@ -13,9 +13,14 @@ import Dimension from 'constants/dimension';
 interface AddListFoodProps {
   control: Control<AddFoodPackageFormType>;
   dishesList: IDish[];
+  disabled?: boolean;
 }
 
-const AddListFood = ({ control, dishesList }: AddListFoodProps) => {
+const AddListFood = ({
+  control,
+  dishesList,
+  disabled = false,
+}: AddListFoodProps) => {
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: 'dishes',
@@ -52,23 +57,34 @@ const AddListFood = ({ control, dishesList }: AddListFoodProps) => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>Dishes List</Text>
-          <TouchableOpacity
-            style={styles.addBtn}
-            onPress={() => setModalVisibility(true)}>
-            <Text style={styles.addBtnLabel}>Add</Text>
-            <PlusRounded width={16} height={16} fill={Colors.black} />
-          </TouchableOpacity>
+          {!disabled && (
+            <TouchableOpacity
+              style={styles.addBtn}
+              onPress={() => setModalVisibility(true)}>
+              <Text style={styles.addBtnLabel}>Add</Text>
+              <PlusRounded width={16} height={16} fill={Colors.black} />
+            </TouchableOpacity>
+          )}
         </View>
         <View style={styles.body}>
-          {fields.map((item, index) => (
-            <ListFoodItem
-              key={item.id}
-              name={item.title}
-              quantity={item.quantity}
-              onRemove={() => onRemove(index)}
-              onChangeQuantity={onChangeQuantity(item, index)}
-            />
-          ))}
+          {fields.map((item, index) =>
+            disabled ? (
+              <View style={styles.foodItemWrapper}>
+                <Text style={styles.foodItemLabel}>
+                  {item.title || 'No Title'}
+                </Text>
+                <Text>{item.quantity}</Text>
+              </View>
+            ) : (
+              <ListFoodItem
+                key={item.id}
+                name={item.title}
+                quantity={item.quantity}
+                onRemove={() => onRemove(index)}
+                onChangeQuantity={onChangeQuantity(item, index)}
+              />
+            ),
+          )}
         </View>
       </View>
       <SelectDishModal
@@ -85,7 +101,6 @@ export default AddListFood;
 
 const styles = StyleSheet.create({
   container: {
-    maxHeight: 300,
     marginTop: 16,
   },
   header: {
@@ -113,5 +128,17 @@ const styles = StyleSheet.create({
   },
   body: {
     paddingHorizontal: 8,
+  },
+  foodItemWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginTop: 8,
+    backgroundColor: Colors.gray,
+  },
+  foodItemLabel: {
+    fontWeight: 'bold',
   },
 });

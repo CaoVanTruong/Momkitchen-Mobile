@@ -6,12 +6,13 @@ import { ThemeProvider } from '@rneui/themed';
 import theme from 'theme';
 import { Provider } from 'react-redux';
 import { store } from 'store';
+import Colors from 'constants/colors';
 
 function App(): JSX.Element {
   return (
     <View style={styles.container}>
       <ThemeProvider theme={theme}>
-        <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
+        <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
         <Provider store={store}>
           <Navigation />
         </Provider>
