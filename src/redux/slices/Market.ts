@@ -6,6 +6,7 @@ import {
   getDishTypes,
   getDishes,
   getFoodStyles,
+  removeDish,
   removeDishTypes,
   removeFoodStyle,
 } from 'redux/actions/market';
@@ -121,6 +122,19 @@ const dishTypeSlice = createSlice({
       foodStyles: state.foodStyles.filter(fs => fs.id !== payload),
     }));
     builder.addCase(removeFoodStyle.rejected, state => ({
+      ...state,
+      isLoading: false,
+    }));
+    builder.addCase(removeDish.pending, state => ({
+      ...state,
+      isLoading: true,
+    }));
+    builder.addCase(removeDish.fulfilled, (state, { payload }) => ({
+      ...state,
+      isLoading: false,
+      dishes: state.dishes.filter(dish => dish.id !== payload),
+    }));
+    builder.addCase(removeDish.rejected, state => ({
       ...state,
       isLoading: false,
     }));

@@ -69,7 +69,9 @@ const AddListFood = ({
         <View style={styles.body}>
           {fields.map((item, index) =>
             disabled ? (
-              <View style={styles.foodItemWrapper}>
+              <View
+                key={`foodPackage-${item.id}`}
+                style={styles.foodItemWrapper}>
                 <Text style={styles.foodItemLabel}>
                   {item.title || 'No Title'}
                 </Text>

@@ -13,6 +13,7 @@ const ADD_DISH_TYPES = 'addDishTypes';
 const REMOVE_DISH_TYPES = 'removeDishTypes';
 const DISHES_LIST = 'dishesList';
 const ADD_DISH = 'addDish';
+const REMOVE_DISH = 'removeDish';
 const FOOD_STYLES = 'foodStyles';
 const ADD_FOOD_STYLES = 'addFoodStyles';
 const REMOVE_FOOD_STYLES = 'removeFoodStyles';
@@ -180,6 +181,23 @@ export const removeFoodStyle = createAsyncThunk<number, number>(
         const res = await api.delete(`foodpackagestyles/${foodStyleId}`);
         if (res.status === API_STATUS.OK && res.data.isSuccess) {
           resolve(foodStyleId);
+        } else {
+          reject(res.data.message || 'Error orcurred');
+        }
+      } catch (error) {
+        reject('Error orcurred');
+      }
+    }),
+);
+
+export const removeDish = createAsyncThunk<number, number>(
+  REMOVE_DISH,
+  dishId =>
+    new Promise(async (resolve, reject) => {
+      try {
+        const res = await api.delete(`dishes/${dishId}`);
+        if (res.status === API_STATUS.OK && res.data.isSuccess) {
+          resolve(dishId);
         } else {
           reject(res.data.message || 'Error orcurred');
         }

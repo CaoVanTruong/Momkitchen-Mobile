@@ -1,11 +1,21 @@
 import { ScreenContainer } from 'components';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  ToastAndroid,
+  TouchableOpacity,
+} from 'react-native';
 import DishItem from './DishItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { IDish } from 'types/dish';
-import { addDish, getDishTypes, getDishes } from 'redux/actions/market';
+import {
+  addDish,
+  getDishTypes,
+  getDishes,
+  removeDish,
+} from 'redux/actions/market';
 import { PlusRounded } from 'assets/svgs';
 import Colors from 'constants/colors';
 import AddDishForm from './AddDishForm';
@@ -39,7 +49,11 @@ const DishesScreen = () => {
   const [modalVisible, setModalVisibility] = useState(false);
 
   const renderItem = ({ item }: { item: IDish }) => (
-    <DishItem onPress={() => {}} {...item} />
+    <DishItem
+      onRemove={() => handleRemoveItem(item.id)}
+      onPress={() => {}}
+      {...item}
+    />
   );
 
   const showAddModal = () => {
@@ -49,6 +63,14 @@ const DishesScreen = () => {
   const onAddDish = (values: AddDishFormType) => {
     setModalVisibility(false);
     dispatch(addDish(values));
+  };
+
+  const handleRemoveItem = (id: number) => {
+    dispatch(removeDish(id))
+      .unwrap()
+      .catch((err: any) => {
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
+      });
   };
 
   return (

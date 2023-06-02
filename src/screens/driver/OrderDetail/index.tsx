@@ -4,8 +4,6 @@ import { ScreenContainer } from 'components';
 import Colors from 'constants/colors';
 import React from 'react';
 import { StyleSheet, ToastAndroid, View } from 'react-native';
-import dayjs from 'dayjs';
-import { DEFAULT_DATE_FORMAT } from 'constants/format';
 import { ScrollView } from 'react-native-gesture-handler';
 import Dimension from 'constants/dimension';
 import { useDispatch, useSelector } from 'react-redux';
