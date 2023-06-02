@@ -14,6 +14,7 @@ import { storage } from 'utils/firebase';
 
 const FOOD_PACKAGES = 'foodPackages';
 const ADD_FOOD_PACKAGES = 'addFoodPackages';
+const REMOVE_FOOD_PACKAGES = 'removeFoodPackages';
 const UPDATE_FOOD_PACKAGES = 'updateFoodPackages';
 const FOOD_PACKAGES_IN_SESSION = 'foodPackagesInSessions';
 const ADD_FOOD_PACKAGES_IN_SESSION = 'addFoodPackagesInSessions';
@@ -126,6 +127,24 @@ export const updateFoodPackage = createAsyncThunk<number, IUpdateFoodPackage>(
 
         if (res.status === API_STATUS.OK && res.data.isSuccess) {
           resolve(res.data.message);
+        } else {
+          reject(res.data.message);
+        }
+      } catch (error: any) {
+        reject(error.message);
+      }
+    }),
+);
+
+export const removeFoodPackage = createAsyncThunk<number, number>(
+  REMOVE_FOOD_PACKAGES,
+  foodPackageId =>
+    new Promise(async (resolve, reject) => {
+      try {
+        const res = await api.delete(`foodpackages/${foodPackageId}`);
+
+        if (res.status === API_STATUS.OK && res.data.isSuccess) {
+          resolve(foodPackageId);
         } else {
           reject(res.data.message);
         }

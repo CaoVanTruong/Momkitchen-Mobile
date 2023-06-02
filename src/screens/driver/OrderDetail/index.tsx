@@ -36,10 +36,11 @@ const OrderDetailScreen = () => {
       )
     : 0;
 
-  const submitTitle = getChangeStatusButtonLabel(
-    orderInfo?.deliveryStatus || '',
-    'shipper',
-  );
+  const batchValue = orderInfo?.batch.status || false;
+
+  const submitTitle = batchValue
+    ? getChangeStatusButtonLabel(orderInfo?.deliveryStatus || '', 'shipper')
+    : undefined;
 
   const fetchReadyOrders = () => {
     dispatch(getReadyOrders());
@@ -127,7 +128,7 @@ const OrderDetailScreen = () => {
                     <Text style={styles.directionTitleLabel}>From</Text>
                   </View>
                   <Text style={styles.directionValue}>
-                    {orderInfo.chef.address}
+                    {`${orderInfo.chef.address}, ${orderInfo.chef.buildingName}`}
                   </Text>
                 </View>
                 <View style={styles.directionItem}>

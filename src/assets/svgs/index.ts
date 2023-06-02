@@ -28,3 +28,4 @@ export { default as ChevronUp } from './ChevronUp';
 export { default as Search } from './Search';
 export { default as Direction } from './Direction';
 export { default as Location } from './Location';
+export { default as Trash } from './Trash';

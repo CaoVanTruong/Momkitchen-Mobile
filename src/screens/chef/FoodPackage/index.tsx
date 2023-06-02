@@ -1,8 +1,14 @@
 import { ScreenContainer } from 'components';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFoodPackages } from 'redux/actions/foodPackage';
+import { getFoodPackages, removeFoodPackage } from 'redux/actions/foodPackage';
 import { RootState } from 'store';
 import { IFoodPackage } from 'types/foodPackage';
 import FoodPackageItem from './FoodPackageItem';
@@ -38,12 +44,29 @@ const FoodPackageScreen = () => {
     navigation.navigate('addFoodPackage', { foodPackageId: id });
   };
 
+  const handleRemoveFoodPackage = (id: number) => {
+    dispatch(removeFoodPackage(id))
+      .unwrap()
+      .catch((err: any) => {
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
+      });
+  };
+
   const renderItem = ({ item }: { item: IFoodPackage }) => {
-    return <FoodPackageItem {...item} onPress={() => goToDetail(item.id)} />;
+    return (
+      <FoodPackageItem
+        {...item}
+        onRemove={() => handleRemoveFoodPackage(item.id)}
+        onPress={() => goToDetail(item.id)}
+      />
+    );
   };
 
   return (
-    <ScreenContainer title="Food Package" bodyContainerStyle={styles.container}>
+    <ScreenContainer
+      title="Food Package"
+      isLoading={isLoading}
+      bodyContainerStyle={styles.container}>
       <View>
         <Input
           value={searchText}
@@ -62,7 +85,7 @@ const FoodPackageScreen = () => {
         )}
         keyExtractor={item => item.id.toString()}
         renderItem={renderItem}
-        refreshing={isLoading}
+        refreshing={false}
         onRefresh={getFoodPackagesList}
       />
       <TouchableOpacity style={styles.overlayBtn} onPress={onAddTypeItem}>

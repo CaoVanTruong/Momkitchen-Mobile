@@ -1,5 +1,5 @@
 import { Image, Text } from '@rneui/themed';
-import { ImagePlaceholder } from 'assets/svgs';
+import { ImagePlaceholder, Trash } from 'assets/svgs';
 import Colors from 'constants/colors';
 import Dimension from 'constants/dimension';
 
@@ -10,6 +10,7 @@ import { IFoodPackage } from 'types/foodPackage';
 
 interface FoodPackageItemProps extends IFoodPackage {
   onPress: () => void;
+  onRemove: () => void;
 }
 
 const FoodPackageItem = ({
@@ -19,6 +20,7 @@ const FoodPackageItem = ({
   defaultPrice,
   foodPackageStyle,
   onPress,
+  onRemove,
 }: FoodPackageItemProps) => {
   return (
     <View style={styles.container}>
@@ -42,6 +44,11 @@ const FoodPackageItem = ({
               </View>
               <Text style={styles.price}>{`${defaultPrice} VND`}</Text>
             </View>
+          </View>
+          <View style={styles.action}>
+            <TouchableOpacity onPress={onRemove} style={styles.actionBtn}>
+              <Trash width={28} height={28} stroke={Colors.white} />
+            </TouchableOpacity>
           </View>
         </View>
       </TouchableOpacity>
@@ -108,5 +115,16 @@ const styles = StyleSheet.create({
   infoWrapper: {
     flex: 1,
     alignItems: 'flex-start',
+  },
+  action: {
+    position: 'absolute',
+    right: -12,
+    top: -12,
+    backgroundColor: Colors.red,
+    borderTopRightRadius: Dimension.RADIUS_2,
+    borderBottomLeftRadius: Dimension.RADIUS_2,
+  },
+  actionBtn: {
+    padding: 4,
   },
 });

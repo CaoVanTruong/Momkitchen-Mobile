@@ -40,4 +40,5 @@ export type IChef = {
   name: string;
   phone: string;
   address: string;
+  buildingName: string;
 };

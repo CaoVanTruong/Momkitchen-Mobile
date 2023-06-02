@@ -41,7 +41,7 @@ const HistoryScreen = () => {
         onRefreshData={fetchOrderList}
         EmptyListComponent={
           <View>
-            <Text>No Collection Order</Text>
+            <Text>No Order Found!</Text>
           </View>
         }
       />

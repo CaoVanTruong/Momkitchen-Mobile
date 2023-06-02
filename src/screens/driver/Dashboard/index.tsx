@@ -69,7 +69,10 @@ const DashboardScreen = () => {
   };
 
   const renderOrderItems = ({ item }: { item: IShipperOrder }) => {
-    const btnLabel = getChangeStatusButtonLabel(item.deliveryStatus, 'shipper');
+    const batchValue = item?.batch.status || false;
+    const btnLabel = batchValue
+      ? getChangeStatusButtonLabel(item.deliveryStatus, 'shipper')
+      : undefined;
     return (
       <OrderItem
         confirmBtnLabel={btnLabel}

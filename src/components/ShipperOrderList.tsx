@@ -7,6 +7,7 @@ import { getChangeStatusButtonLabel } from 'utils/orderStatus';
 
 interface ShipperOrderListProps {
   orders: IShipperOrder[];
+  type?: 'collection' | 'delivery';
   changeStatus?: (id: number) => void;
   onRefreshData?: () => void;
   EmptyListComponent?: React.ReactElement;
@@ -14,6 +15,7 @@ interface ShipperOrderListProps {
 
 const ShipperOrderList = ({
   orders,
+  type = 'collection',
   changeStatus = () => {},
   onRefreshData,
   EmptyListComponent,
@@ -33,7 +35,10 @@ const ShipperOrderList = ({
   };
 
   const renderItem = ({ item }: { item: IShipperOrder }) => {
-    const btnLabel = getChangeStatusButtonLabel(item.deliveryStatus, 'shipper');
+    const btnLabel =
+      type === 'collection'
+        ? undefined
+        : getChangeStatusButtonLabel(item.deliveryStatus, 'shipper');
     return (
       <OrderItem
         confirmBtnLabel={btnLabel}

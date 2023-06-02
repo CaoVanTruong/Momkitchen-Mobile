@@ -3,6 +3,7 @@ import {
   addFoodPackage,
   getFoodPackages,
   getFoodPackagesInSession,
+  removeFoodPackage,
   updateFoodPackage,
 } from 'redux/actions/foodPackage';
 import { IFoodPackageState } from 'types/foodPackage';
@@ -62,6 +63,19 @@ const foodPackageSlice = createSlice({
       isLoading: false,
     }));
     builder.addCase(updateFoodPackage.rejected, state => ({
+      ...state,
+      isLoading: false,
+    }));
+    builder.addCase(removeFoodPackage.pending, state => ({
+      ...state,
+      isLoading: true,
+    }));
+    builder.addCase(removeFoodPackage.fulfilled, (state, { payload }) => ({
+      ...state,
+      isLoading: false,
+      items: state.items.filter(i => i.id !== payload),
+    }));
+    builder.addCase(removeFoodPackage.rejected, state => ({
       ...state,
       isLoading: false,
     }));

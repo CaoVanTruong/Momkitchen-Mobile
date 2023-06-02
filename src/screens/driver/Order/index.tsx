@@ -128,9 +128,10 @@ const OrderScreen = () => {
         animationType="spring">
         <TabView.Item style={styles.tabViewItemContainer}>
           <ShipperOrderList
-            orders={data.collection}
+            orders={data.collection.filter(o => o.deliveryStatus === 'Pending')}
             changeStatus={onChangeStatus}
             onRefreshData={fetchOrderList}
+            type="collection"
             EmptyListComponent={
               <View>
                 <Text>No Collection Order</Text>
@@ -141,6 +142,7 @@ const OrderScreen = () => {
         <TabView.Item style={styles.tabViewItemContainer}>
           <ShipperOrderList
             orders={data.delivery}
+            type="delivery"
             changeStatus={onChangeStatus}
             onRefreshData={fetchOrderList}
             EmptyListComponent={

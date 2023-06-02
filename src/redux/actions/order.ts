@@ -89,6 +89,7 @@ export const getShipperOrders = createAsyncThunk<IShipperOrder[]>(
               name: item.chefName,
               phone: item.chefPhone,
               address: item.chefAddress,
+              buildingName: item.buildingName,
             },
           }));
           resolve(returnData as IShipperOrder[]);
