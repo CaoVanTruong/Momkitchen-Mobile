@@ -1,9 +1,9 @@
 import { Text } from '@rneui/themed';
 import { Bell, Cash, List } from 'assets/svgs';
 import React, { useEffect } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, ToastAndroid, View } from 'react-native';
 import { OrderItem, ScreenContainer } from 'components';
-import { IOrder } from 'types/order';
+import { IChangeOrderStatusResponse, IOrder } from 'types/order';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import {
@@ -40,7 +40,16 @@ const DashboardScreen = () => {
   };
 
   const changeStatus = (id: number) => {
-    dispatch(changeOrderStatus(id)).unwrap().then(fetchRecentOrders);
+    dispatch(changeOrderStatus(id))
+      .unwrap()
+      .then((res: IChangeOrderStatusResponse) => {
+        if (!['New', 'Confirmed', 'Preparing'].includes(res.status)) {
+          fetchRecentOrders();
+        }
+      })
+      .catch((err: any) => {
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
+      });
   };
 
   useEffect(() => {

@@ -30,9 +30,11 @@ const MarketItem = ({
               Created Date: {dayjs(createDate).format(DEFAULT_DATE_FORMAT)}
             </Text>
             <Text style={styles.timeline}>
-              {`Timeline: ${dayjs(startTime).format(
-                DEFAULT_TIME_FORMAT,
-              )} - ${dayjs(endTime).format(DEFAULT_TIME_FORMAT)}`}
+              {endTime
+                ? `Timeline: ${dayjs(startTime).format(
+                    DEFAULT_TIME_FORMAT,
+                  )} - ${dayjs(endTime).format(DEFAULT_TIME_FORMAT)}`
+                : `Start at: ${dayjs(startTime).format(DEFAULT_TIME_FORMAT)}`}
             </Text>
           </View>
         </View>

@@ -2,7 +2,7 @@ import { Tab, TabView, Text } from '@rneui/themed';
 import { ScreenContainer, ShipperOrderList } from 'components';
 import Colors from 'constants/colors';
 import React, { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, ToastAndroid, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { changeOrderStatus, getShipperOrders } from 'redux/actions/order';
@@ -38,20 +38,36 @@ const OrderScreen = () => {
     dispatch(changeOrderStatus(id))
       .unwrap()
       .then(() => {
-        fetchOrderList();
         fetchReadyOrderList();
+      })
+      .catch((err: any) => {
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
       });
   };
 
   const [tabIndex, setTabIndex] = useState(0);
 
   const data = useMemo(() => {
+    const statusOrder = new Map([
+      ['Delivering', 1],
+      ['Pending', 2],
+      ['Preparing', 3],
+      ['Confirmed', 4],
+    ]);
+
+    const sortedOrders = [...orderList];
+    sortedOrders.sort(
+      (a, b) =>
+        (statusOrder.get(a.deliveryStatus) || 4) -
+        (statusOrder.get(b.deliveryStatus) || 4),
+    );
+
     const dataByBatch: { [x: string]: IShipperOrder[] } = {
       collection: [],
       delivery: [],
     };
 
-    const filteredOrders = orderList.filter(
+    const filteredOrders = sortedOrders.filter(
       x => !EXCEPTED_STATUS.includes(x.deliveryStatus),
     );
 

@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeOrderStatus } from 'redux/actions/order';
+import { changeOrderStatus, getShipperOrders } from 'redux/actions/order';
 import { getNumOfOrders, getReadyOrders } from 'redux/actions/shipperHome';
 import { RootState } from 'store';
 import { IShipperOrder } from 'types/shipperHome';
@@ -37,10 +37,18 @@ const DashboardScreen = () => {
     dispatch(getReadyOrders());
   };
 
+  const fetchShipperOrders = () => {
+    dispatch(getShipperOrders());
+  };
+
   const changeStatus = (id: number) => {
     dispatch(changeOrderStatus(id))
       .unwrap()
-      .then(fetchReadyOrders)
+      .then(() => {
+        fetchReadyOrders();
+        fetchShipperOrders();
+        fetchNumOfOrders();
+      })
       .catch((err: any) => {
         ToastAndroid.show(err.message, ToastAndroid.SHORT);
       });
@@ -105,7 +113,10 @@ const DashboardScreen = () => {
             renderItem={renderOrderItems}
             style={[styles.listWrapper, styles.ph_24]}
             refreshing={isLoading}
-            onRefresh={fetchReadyOrders}
+            onRefresh={() => {
+              fetchReadyOrders();
+              fetchNumOfOrders();
+            }}
             ListEmptyComponent={
               <View style={styles.noOrder}>
                 <Text>No order ready to ship</Text>

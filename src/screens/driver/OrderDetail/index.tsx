@@ -10,12 +10,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Dimension from 'constants/dimension';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
-import {
-  cancelOrder,
-  changeOrderStatus,
-  getShipperOrders,
-} from 'redux/actions/order';
+import { cancelOrder, changeOrderStatus } from 'redux/actions/order';
 import { getChangeStatusButtonLabel } from 'utils/orderStatus';
+import { getReadyOrders } from 'redux/actions/shipperHome';
+import { Direction, Location } from 'assets/svgs';
 
 const OrderDetailScreen = () => {
   const router = useRoute();
@@ -45,14 +43,14 @@ const OrderDetailScreen = () => {
     'shipper',
   );
 
-  const fetchOrderList = () => {
-    dispatch(getShipperOrders());
+  const fetchReadyOrders = () => {
+    dispatch(getReadyOrders());
   };
 
   const onSubmit = () => {
     dispatch(changeOrderStatus(orderId))
       .unwrap()
-      .then(fetchOrderList)
+      .then(fetchReadyOrders)
       .catch((err: any) => {
         ToastAndroid.show(err.message, ToastAndroid.SHORT);
       });
@@ -61,7 +59,6 @@ const OrderDetailScreen = () => {
   const onCancel = () => {
     dispatch(cancelOrder(orderId))
       .unwrap()
-      .then(fetchOrderList)
       .catch((err: any) => {
         ToastAndroid.show(err.message, ToastAndroid.SHORT);
       });
@@ -80,14 +77,12 @@ const OrderDetailScreen = () => {
               <Text style={styles.infoValue}>{orderInfo?.id}</Text>
             </View>
             <View style={styles.infoRow}>
-              <Text style={styles.label}>Order Date</Text>
-              <Text style={styles.infoValue}>
-                {dayjs(orderInfo?.date).format(DEFAULT_DATE_FORMAT)}
-              </Text>
+              <Text style={styles.label}>Batch</Text>
+              <Text style={styles.infoValue}>{orderInfo?.batch.id}</Text>
             </View>
             <View style={styles.infoRow}>
-              <Text style={styles.label}>Status</Text>
-              <Text style={styles.infoValue}>{orderInfo?.status}</Text>
+              <Text style={styles.label}>Chef Phone</Text>
+              <Text style={styles.infoValue}>{orderInfo?.chef.phone}</Text>
             </View>
             <View style={styles.infoRow}>
               <Text style={styles.label}>Customer Name</Text>
@@ -96,13 +91,6 @@ const OrderDetailScreen = () => {
             <View style={styles.infoRow}>
               <Text style={styles.label}>Customer Phone</Text>
               <Text style={styles.infoValue}>{orderInfo?.customer.phone}</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.label}>Building</Text>
-              <Text
-                style={
-                  styles.infoValue
-                }>{`${orderInfo?.building.name}, ${orderInfo?.building.address}`}</Text>
             </View>
             <View style={styles.verticalInfoRow}>
               <Text style={styles.label}>Food Packages</Text>
@@ -125,24 +113,41 @@ const OrderDetailScreen = () => {
               </View>
             </View>
             <View style={styles.infoRow}>
-              <Text style={styles.label}>Subtotal</Text>
+              <Text style={styles.label}>Total Price</Text>
               <Text style={styles.infoValue}>{`${totalPrice} VND`}</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.label}>Delivery Status</Text>
-              <Text style={styles.infoValue}>{orderInfo?.deliveryStatus}</Text>
             </View>
             <View style={styles.infoRow}>
               <Text style={styles.label}>Note</Text>
               <Text style={styles.infoValue}>{orderInfo?.note}</Text>
             </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.label}>Batch</Text>
-              <Text style={styles.infoValue}>{orderInfo?.batch.id}</Text>
+            <View style={styles.verticalInfoRow}>
+              <Text style={styles.label}>Delivery Address</Text>
+              <View style={styles.pksWrapper}>
+                <View style={styles.directionItem}>
+                  <View style={styles.directionTitle}>
+                    <Direction width={28} height={28} fill={Colors.black} />
+                    <Text style={styles.directionTitleLabel}>From</Text>
+                  </View>
+                  <Text style={styles.directionValue}>
+                    {orderInfo.chef.address}
+                  </Text>
+                </View>
+                <View style={styles.directionItem}>
+                  <View style={styles.directionTitle}>
+                    <Location width={28} height={28} fill={Colors.black} />
+                    <Text style={styles.directionTitleLabel}>To</Text>
+                  </View>
+                  <Text style={styles.directionValue}>
+                    {`${orderInfo.building.name}, ${orderInfo.building.address}`}
+                  </Text>
+                </View>
+              </View>
             </View>
             <View style={styles.infoRow}>
-              <Text style={styles.label}>Session</Text>
-              <Text style={styles.infoValue}>{orderInfo?.session.title}</Text>
+              <Text style={styles.label}>Status</Text>
+              <Text style={[styles.infoValue, styles.status]}>
+                {orderInfo?.deliveryStatus.toUpperCase()}
+              </Text>
             </View>
           </ScrollView>
           {!!submitTitle && (
@@ -153,12 +158,14 @@ const OrderDetailScreen = () => {
                 titleStyle={styles.buttonTitle}
                 onPress={onSubmit}
               />
-              <Button
-                title={'Cancel'}
-                buttonStyle={styles.cancelBtn}
-                titleStyle={styles.cancelButtonTitle}
-                onPress={onCancel}
-              />
+              {orderInfo.deliveryStatus === 'Delivering' && (
+                <Button
+                  title={'Cancel'}
+                  buttonStyle={styles.cancelBtn}
+                  titleStyle={styles.cancelButtonTitle}
+                  onPress={onCancel}
+                />
+              )}
             </View>
           )}
         </>
@@ -252,5 +259,24 @@ const styles = StyleSheet.create({
     color: Colors.black,
     fontWeight: 'bold',
     textTransform: 'uppercase',
+  },
+  directionItem: {
+    marginVertical: 8,
+  },
+  directionTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  directionTitleLabel: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  directionValue: {
+    marginVertical: 8,
+    marginLeft: 16,
+  },
+  status: {
+    color: Colors.red,
   },
 });

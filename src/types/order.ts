@@ -37,3 +37,8 @@ export type IOrderState = {
   isLoading: boolean;
   items: IOrder[];
 };
+
+export type IChangeOrderStatusResponse = {
+  orderId: number;
+  status: string;
+};

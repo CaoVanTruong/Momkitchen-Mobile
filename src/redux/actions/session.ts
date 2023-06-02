@@ -7,17 +7,19 @@ const SESSION_LIST = 'sessionsList';
 
 export const getSessions = createAsyncThunk<ISession[]>(
   SESSION_LIST,
-  async (_, { rejectWithValue }) => {
-    try {
-      const res = await api.get('sessions');
+  () =>
+    new Promise(async (resolve, reject) => {
+      try {
+        const res = await api.get('sessions');
 
-      if (res.status === API_STATUS.OK && res.data.isSuccess) {
-        return res.data.message;
-      } else {
-        rejectWithValue('Error orcurred');
+        if (res.status === API_STATUS.OK && res.data.isSuccess) {
+          const resData = res.data.message as ISession[];
+          resolve(resData.filter(s => s.status === true));
+        } else {
+          reject(res.data.message || 'Error orcurred');
+        }
+      } catch (error: any) {
+        reject(error.message);
       }
-    } catch (error: any) {
-      rejectWithValue(error.message);
-    }
-  },
+    }),
 );

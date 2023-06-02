@@ -28,10 +28,18 @@ const orderSlice = createSlice({
       isLoading: false,
       items: payload,
     }));
-    builder.addCase(changeOrderStatus.fulfilled, state => ({
-      ...state,
-      isLoading: false,
-    }));
+    builder.addCase(changeOrderStatus.fulfilled, (state, { payload }) => {
+      const { orderId, status } = payload;
+
+      const draftState = state.items.map(item =>
+        item.id === orderId ? { ...item, deliveryStatus: status } : item,
+      );
+
+      return {
+        isLoading: false,
+        items: [...draftState],
+      };
+    });
     builder.addCase(cancelOrder.fulfilled, state => ({
       ...state,
       isLoading: false,

@@ -2,12 +2,11 @@ import { Tab, TabView } from '@rneui/themed';
 import { OrderList, ScreenContainer } from 'components';
 import Colors from 'constants/colors';
 import React, { useEffect, useMemo, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ToastAndroid } from 'react-native';
 import { IOrder } from 'types/order';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { changeOrderStatus, getOrders } from 'redux/actions/order';
-import { getRecentOrders } from 'redux/actions/chefHome';
 
 const Order = () => {
   const dispatch = useDispatch<any>();
@@ -19,10 +18,6 @@ const Order = () => {
     dispatch(getOrders());
   };
 
-  const fetchRecentOrderList = () => {
-    dispatch(getRecentOrders());
-  };
-
   useEffect(() => {
     fetchOrderList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -31,9 +26,8 @@ const Order = () => {
   const onChangeStatus = (id: number) => {
     dispatch(changeOrderStatus(id))
       .unwrap()
-      .then(() => {
-        fetchOrderList();
-        fetchRecentOrderList();
+      .catch((err: any) => {
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
       });
   };
 
@@ -46,7 +40,8 @@ const Order = () => {
       Preparing: [],
       Pending: [],
       Completed: [],
-      Cancelled: [],
+      Delivering: [],
+      Failed: [],
     };
 
     !!orderList.length &&
@@ -151,7 +146,12 @@ const Order = () => {
         </TabView.Item>
         <TabView.Item style={styles.tabViewItemContainer}>
           <OrderList
-            orders={[...data.Pending, ...data.Completed]}
+            orders={[
+              ...data.Pending,
+              ...data.Delivering,
+              ...data.Completed,
+              ...data.Failed,
+            ]}
             onRefreshData={fetchOrderList}
           />
         </TabView.Item>

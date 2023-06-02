@@ -4,10 +4,12 @@ import {
   getRecentOrders,
   getRevenue,
 } from 'redux/actions/chefHome';
+import { changeOrderStatus } from 'redux/actions/order';
 import { IChefHomeState } from 'types/chefHome';
 
 const initialState: IChefHomeState = {
   isLoading: false,
+  isStatisticLoading: false,
   numberOfOrders: 0,
   revenue: 0,
   orders: [],
@@ -20,11 +22,11 @@ const chefHomeSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(getNumOfOrders.pending, state => ({
       ...state,
-      isLoading: true,
+      isStatisticLoading: true,
     }));
     builder.addCase(getRevenue.pending, state => ({
       ...state,
-      isLoading: true,
+      isStatisticLoading: true,
     }));
     builder.addCase(getRecentOrders.pending, state => ({
       ...state,
@@ -32,12 +34,12 @@ const chefHomeSlice = createSlice({
     }));
     builder.addCase(getNumOfOrders.fulfilled, (state, { payload }) => ({
       ...state,
-      isLoading: false,
+      isStatisticLoading: false,
       numberOfOrders: payload,
     }));
     builder.addCase(getRevenue.fulfilled, (state, { payload }) => ({
       ...state,
-      isLoading: false,
+      isStatisticLoading: false,
       revenue: payload,
     }));
     builder.addCase(getRecentOrders.fulfilled, (state, { payload }) => ({
@@ -47,7 +49,7 @@ const chefHomeSlice = createSlice({
     }));
     builder.addCase(getNumOfOrders.rejected, state => ({
       ...state,
-      isLoading: false,
+      isStatisticLoading: false,
     }));
     builder.addCase(getRecentOrders.rejected, state => ({
       ...state,
@@ -55,8 +57,29 @@ const chefHomeSlice = createSlice({
     }));
     builder.addCase(getRevenue.rejected, state => ({
       ...state,
-      isLoading: false,
+      isStatisticLoading: false,
     }));
+    builder.addCase(changeOrderStatus.fulfilled, (state, { payload }) => {
+      const { orderId, status } = payload;
+
+      if (!['New', 'Confirmed', 'Preparing'].includes(status)) {
+        return {
+          ...state,
+          isLoading: false,
+          orders: state.orders.filter(o => o.id !== orderId),
+        };
+      }
+
+      const draftState = state.orders.map(item =>
+        item.id === orderId ? { ...item, deliveryStatus: status } : item,
+      );
+
+      return {
+        ...state,
+        isLoading: false,
+        orders: [...draftState],
+      };
+    });
   },
 });
 
