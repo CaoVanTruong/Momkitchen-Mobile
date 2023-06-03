@@ -43,11 +43,11 @@ export const getReadyOrders = createAsyncThunk<IShipperOrder[]>(
           const returnData = listOrders.map((item: any) => ({
             ...item.order,
             chef: {
-              id: item.chefID,
-              name: item.chefName,
-              phone: item.chefPhone,
-              address: item.chefAddress,
-              buildingName: item.buildingName,
+              id: item?.chefID,
+              name: item?.chefName,
+              phone: item?.chefPhone,
+              address: item?.chefAddress,
+              buildingName: item?.buildingName,
             },
           }));
           resolve(returnData as IShipperOrder[]);

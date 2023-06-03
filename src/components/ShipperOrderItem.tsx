@@ -41,7 +41,7 @@ const ShipperOrderItem = ({
   const totalPrice =
     orderDetails?.reduce(
       (total, item) =>
-        total + (item.sessionPackage?.price || 0) * item.quantity,
+        total + (item.sessionPackage?.price || 0) * (item?.quantity || 1),
       0,
     ) || 0;
 
@@ -77,11 +77,11 @@ const ShipperOrderItem = ({
         </View>
         <View style={styles.infoWrapper}>
           <Direction width={24} height={24} style={styles.infoIcon} />
-          <Text style={styles.address}>{`From: ${chef.buildingName}`}</Text>
+          <Text style={styles.address}>{`From: ${chef?.buildingName}`}</Text>
         </View>
         <View style={styles.infoWrapper}>
           <Location width={24} height={24} style={styles.infoIcon} />
-          <Text style={styles.address}>{`To: ${building.name}`}</Text>
+          <Text style={styles.address}>{`To: ${building?.name}`}</Text>
         </View>
       </View>
       <View style={styles.statusWrapper}>
