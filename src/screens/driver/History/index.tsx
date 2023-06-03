@@ -33,12 +33,12 @@ const HistoryScreen = () => {
     <ScreenContainer
       title="History"
       hasBack={false}
-      bodyContainerStyle={styles.container}
-      isLoading={isLoading}>
+      bodyContainerStyle={styles.container}>
       <ShipperOrderList
         orders={data}
         changeStatus={() => {}}
         onRefreshData={fetchOrderList}
+        isLoading={isLoading}
         EmptyListComponent={
           <View>
             <Text>No Order Found!</Text>

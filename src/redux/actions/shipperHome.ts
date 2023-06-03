@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { API_STATUS } from 'constants/api';
-import { IChef, IShipperOrder } from 'types/shipperHome';
+import { IShipperOrder } from 'types/shipperHome';
 import { IUserState } from 'types/user';
 import api from 'utils/api';
 
@@ -40,15 +40,15 @@ export const getReadyOrders = createAsyncThunk<IShipperOrder[]>(
 
         if (res.status === API_STATUS.OK && res.data.isSuccess) {
           const listOrders = res.data.message;
-          const chefData: IChef = {
-            id: listOrders.chefID,
-            name: listOrders.chefName,
-            phone: listOrders.chefPhone,
-            address: listOrders.chefAddress,
-          };
           const returnData = listOrders.map((item: any) => ({
             ...item.order,
-            chef: chefData,
+            chef: {
+              id: item.chefID,
+              name: item.chefName,
+              phone: item.chefPhone,
+              address: item.chefAddress,
+              buildingName: item.buildingName,
+            },
           }));
           resolve(returnData as IShipperOrder[]);
         } else {

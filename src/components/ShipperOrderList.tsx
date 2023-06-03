@@ -1,13 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import { OrderItem } from 'components';
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { IShipperOrder } from 'types/shipperHome';
 import { getChangeStatusButtonLabel } from 'utils/orderStatus';
+import ShipperOrderItem from './ShipperOrderItem';
 
 interface ShipperOrderListProps {
   orders: IShipperOrder[];
-  type?: 'collection' | 'delivery';
+  isLoading?: boolean;
   changeStatus?: (id: number) => void;
   onRefreshData?: () => void;
   EmptyListComponent?: React.ReactElement;
@@ -15,9 +15,9 @@ interface ShipperOrderListProps {
 
 const ShipperOrderList = ({
   orders,
-  type = 'collection',
   changeStatus = () => {},
   onRefreshData,
+  isLoading,
   EmptyListComponent,
 }: ShipperOrderListProps) => {
   const navigation = useNavigation<any>();
@@ -35,12 +35,9 @@ const ShipperOrderList = ({
   };
 
   const renderItem = ({ item }: { item: IShipperOrder }) => {
-    const btnLabel =
-      type === 'collection'
-        ? undefined
-        : getChangeStatusButtonLabel(item.deliveryStatus, 'shipper');
+    const btnLabel = getChangeStatusButtonLabel(item.deliveryStatus, 'shipper');
     return (
-      <OrderItem
+      <ShipperOrderItem
         confirmBtnLabel={btnLabel}
         onPress={() => onItemPress(item.id)}
         onConfirm={() => onConfirm(item.id)}
@@ -55,7 +52,7 @@ const ShipperOrderList = ({
         data={orders}
         keyExtractor={item => item.id.toString()}
         renderItem={renderItem}
-        refreshing={false}
+        refreshing={isLoading}
         onRefresh={onRefreshData}
         ListEmptyComponent={EmptyListComponent}
       />

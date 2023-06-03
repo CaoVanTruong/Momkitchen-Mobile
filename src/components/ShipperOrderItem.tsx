@@ -1,5 +1,5 @@
 import { Text } from '@rneui/themed';
-import { Clock, Coin, Phone } from 'assets/svgs';
+import { Clock, Coin, Direction, Location, Phone } from 'assets/svgs';
 import Colors from 'constants/colors';
 import Dimension from 'constants/dimension';
 import { DEFAULT_DATETIME_FORMAT } from 'constants/format';
@@ -8,9 +8,10 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { ICustomer, IOrderDetail } from 'types/order';
+import { IBuilding, ICustomer, IOrderDetail } from 'types/order';
+import { IChef } from 'types/shipperHome';
 
-interface OrderItemProps {
+interface ShipperOrderItemProps {
   disabled?: boolean;
   confirmBtnLabel?: string;
   onConfirm?: () => void;
@@ -20,19 +21,23 @@ interface OrderItemProps {
   customer: ICustomer;
   orderDetails: IOrderDetail[];
   deliveryStatus: string;
+  chef: IChef;
+  building: IBuilding;
 }
 
-const OrderItem = ({
+const ShipperOrderItem = ({
   id,
   date,
   customer,
   orderDetails,
   deliveryStatus,
   disabled,
+  chef,
+  building,
   confirmBtnLabel,
   onConfirm,
   onPress,
-}: OrderItemProps) => {
+}: ShipperOrderItemProps) => {
   const totalPrice =
     orderDetails?.reduce(
       (total, item) =>
@@ -70,6 +75,14 @@ const OrderItem = ({
             {dayjs(date).format(DEFAULT_DATETIME_FORMAT)}
           </Text>
         </View>
+        <View style={styles.infoWrapper}>
+          <Direction width={24} height={24} style={styles.infoIcon} />
+          <Text style={styles.address}>{`From: ${chef.buildingName}`}</Text>
+        </View>
+        <View style={styles.infoWrapper}>
+          <Location width={24} height={24} style={styles.infoIcon} />
+          <Text style={styles.address}>{`To: ${building.name}`}</Text>
+        </View>
       </View>
       <View style={styles.statusWrapper}>
         {confirmBtnLabel ? (
@@ -85,7 +98,7 @@ const OrderItem = ({
   );
 };
 
-export default OrderItem;
+export default ShipperOrderItem;
 
 const styles = StyleSheet.create({
   container: {
@@ -138,6 +151,9 @@ const styles = StyleSheet.create({
   phone: {},
   time: {},
   price: {},
+  address: {
+    fontWeight: 'bold',
+  },
   infoWrapper: {
     flexDirection: 'row',
     alignItems: 'center',

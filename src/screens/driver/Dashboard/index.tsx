@@ -1,6 +1,6 @@
 import { Text } from '@rneui/themed';
 import { List } from 'assets/svgs';
-import { OrderItem, ScreenContainer } from 'components';
+import { ScreenContainer, ShipperOrderItem } from 'components';
 import Colors from 'constants/colors';
 import Dimension from 'constants/dimension';
 import React, { useEffect } from 'react';
@@ -69,12 +69,12 @@ const DashboardScreen = () => {
   };
 
   const renderOrderItems = ({ item }: { item: IShipperOrder }) => {
-    const batchValue = item?.batch.status || false;
+    const batchValue = item.batch?.status || false;
     const btnLabel = batchValue
       ? getChangeStatusButtonLabel(item.deliveryStatus, 'shipper')
       : undefined;
     return (
-      <OrderItem
+      <ShipperOrderItem
         confirmBtnLabel={btnLabel}
         onConfirm={() => onConfirm(item.id)}
         disabled

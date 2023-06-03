@@ -1,13 +1,12 @@
-import { Tab, TabView, Text } from '@rneui/themed';
+import { Text } from '@rneui/themed';
 import { ScreenContainer, ShipperOrderList } from 'components';
 import Colors from 'constants/colors';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { StyleSheet, ToastAndroid, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { changeOrderStatus, getShipperOrders } from 'redux/actions/order';
 import { getReadyOrders } from 'redux/actions/shipperHome';
-import { IShipperOrder } from 'types/shipperHome';
 
 const EXCEPTED_STATUS = ['New', 'Completed', 'Failed'];
 
@@ -45,8 +44,6 @@ const OrderScreen = () => {
       });
   };
 
-  const [tabIndex, setTabIndex] = useState(0);
-
   const data = useMemo(() => {
     const statusOrder = new Map([
       ['Delivering', 1],
@@ -62,25 +59,11 @@ const OrderScreen = () => {
         (statusOrder.get(b.deliveryStatus) || 4),
     );
 
-    const dataByBatch: { [x: string]: IShipperOrder[] } = {
-      collection: [],
-      delivery: [],
-    };
-
     const filteredOrders = sortedOrders.filter(
       x => !EXCEPTED_STATUS.includes(x.deliveryStatus),
     );
 
-    !!filteredOrders.length &&
-      filteredOrders.forEach(item => {
-        const batchValue = item?.batch.status || false;
-
-        if (batchValue) {
-          dataByBatch.delivery.push(item);
-        } else {
-          dataByBatch.collection.push(item);
-        }
-      });
+    const dataByBatch = filteredOrders.filter(item => !!item.batch.status);
 
     return dataByBatch;
   }, [orderList]);
@@ -89,70 +72,19 @@ const OrderScreen = () => {
     <ScreenContainer
       title="Order"
       hasBack={false}
-      isLoading={isChangeStatusLoading || isLoading}
+      isLoading={isChangeStatusLoading}
       bodyContainerStyle={styles.container}>
-      <Tab
-        value={tabIndex}
-        onChange={e => setTabIndex(e)}
-        variant="primary"
-        indicatorStyle={styles.tabIndicator}
-        style={styles.tab}>
-        <Tab.Item
-          title="Collection"
-          titleStyle={active => [
-            styles.tabItemTitle,
-            active && styles.activeTabItemTitle,
-          ]}
-          buttonStyle={styles.tabItem}
-          containerStyle={active => [
-            styles.tabHeader,
-            active && styles.activeTabHeader,
-          ]}
-        />
-        <Tab.Item
-          title="Delivery"
-          titleStyle={active => [
-            styles.tabItemTitle,
-            active && styles.activeTabItemTitle,
-          ]}
-          buttonStyle={styles.tabItem}
-          containerStyle={active => [
-            styles.tabHeader,
-            active && styles.activeTabHeader,
-          ]}
-        />
-      </Tab>
-      <TabView
-        value={tabIndex}
-        onChange={e => setTabIndex(e)}
-        animationType="spring">
-        <TabView.Item style={styles.tabViewItemContainer}>
-          <ShipperOrderList
-            orders={data.collection.filter(o => o.deliveryStatus === 'Pending')}
-            changeStatus={onChangeStatus}
-            onRefreshData={fetchOrderList}
-            type="collection"
-            EmptyListComponent={
-              <View>
-                <Text>No Collection Order</Text>
-              </View>
-            }
-          />
-        </TabView.Item>
-        <TabView.Item style={styles.tabViewItemContainer}>
-          <ShipperOrderList
-            orders={data.delivery}
-            type="delivery"
-            changeStatus={onChangeStatus}
-            onRefreshData={fetchOrderList}
-            EmptyListComponent={
-              <View>
-                <Text>No Deliver Order</Text>
-              </View>
-            }
-          />
-        </TabView.Item>
-      </TabView>
+      <ShipperOrderList
+        orders={data}
+        isLoading={isLoading}
+        changeStatus={onChangeStatus}
+        onRefreshData={fetchOrderList}
+        EmptyListComponent={
+          <View>
+            <Text>No Delivering Order</Text>
+          </View>
+        }
+      />
     </ScreenContainer>
   );
 };
@@ -163,32 +95,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-  },
-  tab: {},
-  tabIndicator: {
-    backgroundColor: Colors.darkPink,
-  },
-  tabHeader: {
-    backgroundColor: Colors.darkPink,
-  },
-  activeTabHeader: {
-    backgroundColor: Colors.white,
-  },
-  tabItem: {
-    paddingHorizontal: 0,
-  },
-  tabItemTitle: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: Colors.white,
-    backgroundColor: 'transparent',
-    paddingHorizontal: 0,
-  },
-  activeTabItemTitle: {
-    color: Colors.black,
-  },
-  tabViewItemContainer: {
-    flex: 1,
     paddingHorizontal: 24,
     paddingVertical: 16,
   },
